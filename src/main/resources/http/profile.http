@@ -1,0 +1,35 @@
+### 1. Create
+POST localhost:8080/profile/create
+Content-Type: application/json
+
+{
+  "name": "Ali",
+  "surname": "Husanov",
+  "email": "alihusan@gmail.com",
+  "phone": "+998901116677",
+  "password": "alihusan1",
+  "status": "ACTIVE",
+  "role": "USER"
+}
+
+### 2. Update
+PUT localhost:8080/profile/update_status_by_id?id=2
+Content-Type: application/json
+
+{
+  "status": "ACTIVE"
+}
+
+### 4. Get All
+GET localhost:8080/profile/get_all
+
+### 5. Delete by id
+DELETE localhost:8080/profile/delete_by_id?id=5
+
+### 7. Filter
+POST localhost:8080/profile/filter?page=1&size=2
+Content-Type: application/json
+
+{
+  "name": "Ali"
+}

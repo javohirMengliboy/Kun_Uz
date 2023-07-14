@@ -1,0 +1,27 @@
+### 1. Create
+POST localhost:8080/region/create
+Content-Type: application/json
+
+{
+  "orderNumber": 1,
+  "nameUz": "Qoraqalpog'iston",
+  "nameRu": "Каракалпакстан",
+  "nameEng": "Karakalpakstan"
+}
+
+### 2. Update
+PUT localhost:8080/region/update_order_by_id?id=4
+Content-Type: application/json
+
+{
+  "orderNumber": 4
+}
+
+### 3. Delete by id
+DELETE localhost:8080/region/delete_by_id?id=5
+
+### 4. Get All
+GET localhost:8080/region/get_all
+
+### 4. Get By Language
+GET localhost:8080/region/get_by_lang?lang=en

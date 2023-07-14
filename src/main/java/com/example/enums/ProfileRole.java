@@ -1,2 +1,5 @@
-package com.example.enums;public class ProfileRole {
+package com.example.enums;
+
+public enum ProfileRole {
+    USER,ADMIN,MODERATOR,PUBLISH
 }
