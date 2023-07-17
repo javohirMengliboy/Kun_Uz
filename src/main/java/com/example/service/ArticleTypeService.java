@@ -1,11 +1,11 @@
 package com.example.service;
 
-import com.example.dto.RegionDTO;
-import com.example.entity.RegionEntity;
+import com.example.dto.ArticleTypeDTO;
+import com.example.entity.ArticleTypeEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.mapper.LanguageMapper;
-import com.example.repository.RegionRepository;
+import com.example.repository.ArticleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,46 +14,46 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RegionService {
+public class ArticleTypeService {
     @Autowired
-    private RegionRepository regionRepository;
+    private ArticleTypeRepository articleTypeRepository;
 
-    public RegionDTO create(RegionDTO dto) {
-        Optional<RegionEntity> optional = regionRepository.findByOrderNumber(dto.getOrderNumber());
+    public ArticleTypeDTO create(ArticleTypeDTO dto) {
+        Optional<ArticleTypeEntity> optional = articleTypeRepository.findByOrderNumber(dto.getOrderNumber());
         if (optional.isPresent()){
             throw  new AppBadRequestException("This order number already exists");
         }
-        RegionEntity entity = new RegionEntity();
+        ArticleTypeEntity entity = new ArticleTypeEntity();
         entity.setOrderNumber(dto.getOrderNumber());
         entity.setNameUz(dto.getNameUz());
         entity.setNameRu(dto.getNameRu());
         entity.setNameEng(dto.getNameEng());
-        regionRepository.save(entity);
+        articleTypeRepository.save(entity);
         dto.setId(entity.getId());
         dto.setVisible(entity.isVisible());
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }
 
-    public Boolean update(RegionDTO dto, Integer id) {
-        regionRepository.save(checkingForUpdate(dto, regionRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"))));
+    public Boolean update(ArticleTypeDTO dto, Integer id) {
+        articleTypeRepository.save(checkingForUpdate(dto, articleTypeRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"))));
         return true;
     }
 
 
 
-    public Boolean deleteRegionById(Integer id) {
-        regionRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"));
-        int effectedRows = regionRepository.deleteRegionById(id);
+    public Boolean deleteArticleTypeById(Integer id) {
+        articleTypeRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"));
+        int effectedRows = articleTypeRepository.deleteArticleTypeById(id);
         return effectedRows > 0;
     }
 
-    public List<RegionDTO> getAll() {
-        List<RegionEntity> entityList = regionRepository.findAllByVisibleTrue();
+    public List<ArticleTypeDTO> getAll() {
+        List<ArticleTypeEntity> entityList = articleTypeRepository.findAllByVisibleTrue();
         if(entityList.isEmpty()){
             throw new ItemNotFoundException("Region not found");
         }
-        List<RegionDTO> dtoList = new ArrayList<>();
+        List<ArticleTypeDTO> dtoList = new ArrayList<>();
         entityList.forEach(entity -> dtoList.add(toDto(entity)));
         return dtoList;
     }
@@ -62,7 +62,7 @@ public class RegionService {
 
     public List<LanguageMapper> getByLanguage(String lang) {
         List<LanguageMapper> mapperList = new ArrayList<>();
-        regionRepository.getRegionByLanguage(lang).forEach(temp -> {
+        articleTypeRepository.getRegionByLanguage(lang).forEach(temp -> {
             LanguageMapper mapper = new LanguageMapper();
             mapper.setId(temp.getId());
             mapper.setOrderNumber(temp.getOrderNumber());
@@ -73,7 +73,7 @@ public class RegionService {
     }
 
 
-    private RegionEntity checkingForUpdate(RegionDTO dto, RegionEntity entity) {
+    private ArticleTypeEntity checkingForUpdate(ArticleTypeDTO dto, ArticleTypeEntity entity) {
         if (dto.getOrderNumber() != null){
             entity.setOrderNumber(dto.getOrderNumber());
         }
@@ -89,10 +89,9 @@ public class RegionService {
         return entity;
     }
 
-    private RegionDTO toDto(RegionEntity entity) {
-        return new RegionDTO(entity.getId(), entity.getOrderNumber(),
+    private ArticleTypeDTO toDto(ArticleTypeEntity entity) {
+        return new ArticleTypeDTO(entity.getId(), entity.getOrderNumber(),
                 entity.getNameUz(), entity.getNameRu(), entity.getNameRu(),
                 entity.isVisible(), entity.getCreatedDate());
     }
-
 }

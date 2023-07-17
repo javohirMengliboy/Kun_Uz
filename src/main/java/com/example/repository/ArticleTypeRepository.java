@@ -1,6 +1,6 @@
 package com.example.repository;
 
-import com.example.entity.RegionEntity;
+import com.example.entity.ArticleTypeEntity;
 import com.example.mapper.LanguageI;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,17 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RegionRepository extends CrudRepository<RegionEntity, Integer> {
-
+public interface ArticleTypeRepository extends CrudRepository<ArticleTypeEntity, Integer> {
     @Transactional
     @Modifying
-    @Query("update RegionEntity set visible = false where id = :id")
-    int deleteRegionById(Integer id);
+    @Query("update ArticleTypeEntity set visible = false where id = :id")
+    int deleteArticleTypeById(Integer id);
 
-    @Query(value = "select id, order_number as orderNumber, case :lang when 'uz' then name_uz when 'ru' then name_ru when 'en' then name_eng end as name from region", nativeQuery = true)
+    @Query(value = "select id, order_number as orderNumber, case :lang when 'uz' then name_uz when 'ru' then name_ru when 'en' then name_eng end as name from article_type", nativeQuery = true)
     List<LanguageI> getRegionByLanguage(@Param("lang") String lang);
 
-    Optional<RegionEntity> findByOrderNumber(Integer orderNumber);
+    Optional<ArticleTypeEntity> findByOrderNumber(Integer orderNumber);
 
-    List<RegionEntity> findAllByVisibleTrue();
+    List<ArticleTypeEntity> findAllByVisibleTrue();
 }

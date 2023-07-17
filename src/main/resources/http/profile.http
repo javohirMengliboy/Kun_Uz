@@ -1,33 +1,42 @@
 ### 1. Create
-POST localhost:8080/profile/create
+POST localhost:8080/api/v1/profile
 Content-Type: application/json
 
 {
-  "name": "Ali",
-  "surname": "Husanov",
-  "email": "alihusan@gmail.com",
-  "phone": "+998901116677",
-  "password": "alihusan1",
+  "name": "Val",
+  "surname": "Or",
+  "email": "val22@gmail.com",
+  "phone": "+998901110046",
+  "password": "orifvaliP8",
   "status": "ACTIVE",
   "role": "USER"
 }
 
 ### 2. Update
-PUT localhost:8080/profile/update_status_by_id?id=2
+PUT localhost:8080/api/v1/profile/4
 Content-Type: application/json
 
 {
-  "status": "ACTIVE"
+  "role": "USER",
+  "visible": 8
+}
+
+### 2. Update for User
+PUT localhost:8080/api/v1/profile/for_user/4
+Content-Type: application/json
+
+{
+  "name": "Valli"
 }
 
 ### 4. Get All
-GET localhost:8080/profile/get_all
+GET localhost:8080/api/v1/profile
 
 ### 5. Delete by id
-DELETE localhost:8080/profile/delete_by_id?id=5
+DELETE localhost:8080/api/v1/profile/6
 
 ### 7. Filter
-POST localhost:8080/profile/filter?page=1&size=2
+POST localhost:8080/api/v1/profile/filter?page=1&size=2
 Content-Type: application/json
 
 {

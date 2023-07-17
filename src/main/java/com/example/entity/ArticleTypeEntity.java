@@ -5,12 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Entity
-@Table(name = "region")
-public class RegionEntity {
+@Table(name = "article_type")
+public class ArticleTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;

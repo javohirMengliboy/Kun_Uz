@@ -1,16 +1,16 @@
 ### 1. Create
-POST localhost:8080/category/create
+POST localhost:8080/api/v1/category/create
 Content-Type: application/json
 
 {
-  "orderNumber": 3,
+  "orderNumber": 8,
   "nameUz": "Audio",
   "nameRu": "Аудио",
   "nameEng": "Audio"
 }
 
 ### 2. Update
-PUT localhost:8080/category/update_order_by_id?id=4
+PUT localhost:8080/api/v1/category/update_order_by_id?id=4
 Content-Type: application/json
 
 {
@@ -18,10 +18,10 @@ Content-Type: application/json
 }
 
 ### 3. Delete by id
-DELETE localhost:8080/category/delete_by_id?id=5
+DELETE localhost:8080/api/v1/category/5
 
 ### 4. Get All
-GET localhost:8080/category/get_all
+GET localhost:8080/api/v1/category
 
 ### 4. Get By Language
-GET localhost:8080/category/get_by_lang?lang=en
+GET localhost:8080/api/v1/category/by_lang?lang=en

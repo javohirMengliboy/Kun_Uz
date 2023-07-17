@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "category")
 public class CategoryEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Column(name = "order_number", unique = true)

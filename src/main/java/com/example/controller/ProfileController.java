@@ -10,44 +10,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/api/v1/profile")
 public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    /**
-     * 1
-     */
-    @PostMapping(value = "/create")
+    @PostMapping(value = "")
     public ResponseEntity<?> create(@RequestBody ProfileDTO dto) {
         return ResponseEntity.ok(profileService.create(dto));
     }
 
-    /**
-     * 2
-     */
-    @PutMapping(value = "/update_status_by_id")
-    public ResponseEntity<Boolean> updateStatusById(@RequestBody ProfileDTO dto,
-                                                    @RequestParam("id") Integer id) {
-        return ResponseEntity.ok(profileService.updateStatusById(dto, id));
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Boolean> updateForAdmin(@RequestBody ProfileDTO dto,
+                                                  @PathVariable("id") Integer id) {
+        return ResponseEntity.ok(profileService.updateForAdmin(dto, id));
+    }
+
+    @PutMapping(value = "/for_user/{id}")
+    public ResponseEntity<Boolean> updateForUser(@RequestBody ProfileDTO dto,
+                                                  @PathVariable("id") Integer id) {
+        return ResponseEntity.ok(profileService.updateForUser(dto, id));
     }
 
 
-    /**
-     * 4
-     */
-    @GetMapping(value = "/get_all")
+
+    @GetMapping(value = "")
     public ResponseEntity<List<ProfileDTO>> getAll() {
         return ResponseEntity.ok(profileService.getAll());
     }
 
-    /** 5 . Delete */
-    @DeleteMapping(value = "/delete_by_id")
-    public ResponseEntity<Boolean> deleteById(@RequestParam("id") Integer id) {
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(profileService.deleteProfileById(id));
     }
 
-    /** 7. Filter */
     @PostMapping(value = "/filter")
     public ResponseEntity<?> filter(@RequestBody ProfileFilterDTO dto,
                                           @RequestParam("page") Integer page,

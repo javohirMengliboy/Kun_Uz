@@ -1,0 +1,27 @@
+### 1. Create
+POST localhost:8080/api/v1/articleType
+Content-Type: application/json
+
+{
+  "orderNumber": 5,
+  "nameUz": "bb",
+  "nameRu": "bbf",
+  "nameEng": "bbgg"
+}
+
+### 2. Update
+PUT localhost:8080/api/v1/articleType/5
+Content-Type: application/json
+
+{
+  "orderNumber": 6
+}
+
+### 3. Delete by id
+DELETE localhost:8080/api/v1/articleType/5
+
+### 4. Get All
+GET localhost:8080/api/v1/articleType
+
+### 4. Get By Language
+GET localhost:8080/api/v1/articleType/by_lang?lang=ru

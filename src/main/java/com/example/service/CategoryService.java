@@ -1,15 +1,17 @@
 package com.example.service;
 
 import com.example.dto.CategoryDTO;
-import com.example.dto.ProfileDTO;
 import com.example.entity.CategoryEntity;
+import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
-import com.example.mapper.CategoryLanguageMapper;
+import com.example.mapper.LanguageMapper;
 import com.example.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -17,6 +19,10 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public CategoryDTO create(CategoryDTO dto) {
+        Optional<CategoryEntity> optional = categoryRepository.findByOrderNumber(dto.getOrderNumber());
+        if (optional.isPresent()){
+            throw  new AppBadRequestException("This order number already exists");
+        }
         CategoryEntity entity = new CategoryEntity();
         entity.setOrderNumber(dto.getOrderNumber());
         entity.setNameUz(dto.getNameUz());
@@ -29,32 +35,63 @@ public class CategoryService {
         return dto;
     }
 
-    public Boolean updateOrderById(CategoryDTO dto, Integer id) {
-        int effectedRows = categoryRepository.updateOrderById(dto.getOrderNumber(),id);
-        return effectedRows > 0;
+    public Boolean update(CategoryDTO dto, Integer id) {
+        categoryRepository.save(checkingForUpdate(dto, categoryRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"))));
+        return true;
     }
 
-    public Boolean deleteProfileById(Integer id) {
-        int effectedRows = categoryRepository.deleteProfileById(id);
+
+    public Boolean deleteCategoryById(Integer id) {
+        categoryRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"));
+        int effectedRows = categoryRepository.deleteCategoryById(id);
         return effectedRows > 0;
     }
 
     public List<CategoryDTO> getAll() {
-        List<CategoryDTO> dtoList = categoryRepository.getAllCategory();
-        if(dtoList.isEmpty()){
+        List<CategoryEntity> entityList = categoryRepository.findAllByVisibleTrue();
+        if(entityList.isEmpty()){
             throw new ItemNotFoundException("Category not found");
         }
+        List<CategoryDTO> dtoList = new ArrayList<>();
+        entityList.forEach(entity -> dtoList.add(toDto(entity)));
         return dtoList;
     }
 
-    public List<CategoryLanguageMapper> getByLanguage(String lang) {
-        if (lang.toLowerCase().startsWith("uz")){
-            return categoryRepository.getUzCategories();
-        }else if (lang.toLowerCase().startsWith("ru")){
-            return categoryRepository.getRuCategories();
-        }else if (lang.toLowerCase().startsWith("en")){
-            return categoryRepository.getEngCategories();
-        }
-        throw new ItemNotFoundException("Not found");
+    public List<LanguageMapper> getByLanguage(String lang) {
+        List<LanguageMapper> mapperList = new ArrayList<>();
+        categoryRepository.getRegionByLanguage(lang).forEach(temp -> {
+            LanguageMapper mapper = new LanguageMapper();
+            mapper.setId(temp.getId());
+            mapper.setOrderNumber(temp.getOrderNumber());
+            mapper.setName(temp.getName());
+            mapperList.add(mapper);
+        });
+        return mapperList;
     }
+
+
+
+
+    private CategoryEntity checkingForUpdate(CategoryDTO dto, CategoryEntity entity) {
+        if (dto.getOrderNumber() != null){
+            entity.setOrderNumber(dto.getOrderNumber());
+        }
+        if (dto.getNameUz() != null){
+            entity.setNameUz(dto.getNameUz());
+        }
+        if (dto.getNameRu() != null){
+            entity.setNameRu(dto.getNameRu());
+        }
+        if (dto.getNameEng() != null){
+            entity.setNameEng(dto.getNameEng());
+        }
+        return entity;
+    }
+
+    private CategoryDTO toDto(CategoryEntity entity) {
+        return new CategoryDTO(entity.getId(), entity.getOrderNumber(),
+                entity.getNameUz(), entity.getNameRu(), entity.getNameRu(),
+                entity.isVisible(), entity.getCreatedDate());
+    }
+
 }

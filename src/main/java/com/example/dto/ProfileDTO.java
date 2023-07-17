@@ -20,7 +20,7 @@ public class ProfileDTO {
     private String password;
     private ProfileStatus status;
     private ProfileRole role;
-    private boolean visible;
+    private Integer visible;
     private LocalDateTime createdDate;
     private Integer photoId;
 
@@ -36,7 +36,7 @@ public class ProfileDTO {
         this.password = password;
         this.status = status;
         this.role = role;
-        this.visible = visible;
+        this.visible = visible ? 1 : 0;
         this.createdDate = createdDate;
         this.photoId = photoId;
     }

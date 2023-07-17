@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProfileRepository extends CrudRepository<ProfileEntity, Integer> {
@@ -26,6 +27,12 @@ public interface ProfileRepository extends CrudRepository<ProfileEntity, Integer
 
     @Transactional
     @Modifying
-    @Query("delete from ProfileEntity where id = :id")
+    @Query("update ProfileEntity set visible = false where id = :id")
     int deleteProfileById(@Param("id") Integer id);
+
+    Optional<ProfileEntity> findByEmail(String email);
+
+    Optional<ProfileEntity> findByPhone(String phone);
+
+    List<ProfileEntity> findAllByVisibleTrue();
 }
