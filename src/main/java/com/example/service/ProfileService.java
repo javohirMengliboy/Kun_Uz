@@ -8,6 +8,7 @@ import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.repository.ProfileCustomRepository;
 import com.example.repository.ProfileRepository;
+import com.example.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +27,7 @@ public class ProfileService {
     @Autowired
     private ProfileCustomRepository profileCustomRepository;
     /** 1 */
-    public ProfileDTO create(ProfileDTO dto) {
+    public ProfileDTO create(ProfileDTO dto, Integer ptrId) {
         check(dto);
         Optional<ProfileEntity> emailEntity = profileRepository.findByEmail(dto.getEmail());
         if (emailEntity.isPresent()){
@@ -38,7 +39,6 @@ public class ProfileService {
         }
 
 
-
         ProfileEntity entity = new ProfileEntity();
         entity.setName(dto.getName());
         entity.setSurname(dto.getSurname());
@@ -47,11 +47,12 @@ public class ProfileService {
         entity.setPassword(dto.getPassword());
         entity.setStatus(dto.getStatus());
         entity.setRole(dto.getRole());
+        entity.setPrtId(ptrId);
         profileRepository.save(entity);
         dto.setId(entity.getId());
         dto.setVisible(entity.isVisible() ? 1 : 0);
         dto.setCreatedDate(entity.getCreatedDate());
-        dto.setPhotoId(entity.getPhotoId());
+
         return dto;
     }
 
@@ -86,7 +87,7 @@ public class ProfileService {
             entity.setPhone(dto.getPhone());
         }
         if (dto.getPassword() != null){
-            entity.setPassword(dto.getPassword());
+            entity.setPassword(MD5Util.encode(dto.getPassword()));
         }
         if (dto.getPhotoId() != null){
             entity.setPhotoId(dto.getPhotoId());

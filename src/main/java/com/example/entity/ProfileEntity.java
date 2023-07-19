@@ -47,4 +47,7 @@ public class ProfileEntity {
 
     @Column(name = "photo_id")
     private Integer photoId;
+
+    @Column(name = "prt_id")
+    private Integer prtId;
 }
