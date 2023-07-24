@@ -17,37 +17,35 @@ public class RegionController {
     @Autowired
     private RegionService regionService;
 
-    @PostMapping(value = "")
+    @PostMapping(value = "/admin")
     public ResponseEntity<?> create(@RequestBody RegionDTO dto,
                                     @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.create(dto));
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/admin/{id}")
     public ResponseEntity<Boolean> updateOrderById(@RequestBody RegionDTO dto,
                                                    @PathVariable("id") Integer id,
                                                    @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.update(dto, id));
     }
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/admin/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id,
                                               @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.deleteRegionById(id));
     }
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/admin")
     public ResponseEntity<List<RegionDTO>> getAll(@RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.getAll());
     }
 
     @GetMapping(value = "/by_lang")
-    public ResponseEntity<List<LanguageMapper>> getByLanguage(@RequestParam("lang") String lang,
-                                                              @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+    public ResponseEntity<List<LanguageMapper>> getByLanguage(@RequestParam("lang") String lang) {
         return ResponseEntity.ok(regionService.getByLanguage(lang));
     }
 }

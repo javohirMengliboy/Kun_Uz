@@ -1,0 +1,54 @@
+### 1. Create
+POST localhost:8080/api/v1/article/admin
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5MzkwMjcsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwMDI1NDI3LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.AGtwqLmZv-mRJGQpN8oCQ1tNlvAYIgcCZC6MozSNE4GUOHfPKqscASkyghO2OSRybCrRHZUmID2swSfGQe2B1g
+
+{
+  "title": "article 12",
+  "description": "des 12",
+  "content": "content 12",
+  "regionId": 2,
+  "categoryId": 3,
+  "articleTypes": [56,55]
+}
+
+### 2. Update
+PUT localhost:8080/api/v1/article/admin/34cc94aa-8318-463a-8cf6-86bb6b7516ba
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5Mzg5NzIsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwMDI1MzcyLCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.dukOqSd942jmUExV5ERqd3o3uSo_LQJUAMMk0KcE1ioFDF4A7GFm5OK0fzPauCNgaw-Z6s4Yoe25PcVnA477gg
+
+{
+  "status": "PUBLISHED"
+}
+
+### 3. Delete by id
+DELETE localhost:8080/api/v1/article/admin/34cc94aa-8318-463a-8cf6-86bb6b7516ba
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5MzkwMjcsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwMDI1NDI3LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.AGtwqLmZv-mRJGQpN8oCQ1tNlvAYIgcCZC6MozSNE4GUOHfPKqscASkyghO2OSRybCrRHZUmID2swSfGQe2B1g
+
+### 4. Get All
+GET localhost:8080/api/v1/article
+
+
+### 5. Get All
+GET localhost:8080/api/v1/article/last_5_by_type?type=1&limit=5
+
+### 6. Get All
+GET localhost:8080/api/v1/article/last_5_by_type?type=1&limit=3
+
+### 7. Get All
+POST localhost:8080/api/v1/article/last_8
+Content-Type: application/json
+
+[
+  "812e79b9-b07b-40d7-b45b-342fec6cf261" ,
+  "b26233e2-e5d1-4bab-98f5-0489eec96930" ,
+  "27c65bc0-2b9f-453c-b793-06c73f6974b0"
+]
+
+### 8. get by id
+GET localhost:8080/api/v1/article/get_by_id/c698a1f4-fdb2-4044-9480-013d17df29ee
+
+### 9. get by type
+GET localhost:8080/api/v1/article/get_by_type_not_id?id=c698a1f4-fdb2-4044-9480-013d17df29ee&type=1
+
+

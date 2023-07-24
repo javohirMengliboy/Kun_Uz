@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ProfileService {
@@ -67,7 +66,7 @@ public class ProfileService {
         return true;
     }
 
-    public Boolean updateForUser(ProfileDTO dto, Integer id) {
+    public Boolean updateForUser(Integer id, ProfileDTO dto) {
         ProfileEntity entity = profileRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Profile not found"));
         profileRepository.save(checkingForUpdate(dto,entity));
         return true;

@@ -17,37 +17,35 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping(value = "")
+    @PostMapping(value = "/admin")
     public ResponseEntity<?> create(@RequestBody CategoryDTO dto,
                                     @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(categoryService.create(dto));
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/admin/{id}")
     public ResponseEntity<Boolean> updateOrderById(@RequestBody CategoryDTO dto,
                                                    @PathVariable("id") Integer id,
                                                    @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(categoryService.update(dto, id));
     }
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/admin/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id,
                                               @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(categoryService.deleteCategoryById(id));
     }
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/admin")
     public ResponseEntity<List<CategoryDTO>> getAll(@RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(categoryService.getAll());
     }
 
     @GetMapping(value = "/by_lang")
-    public ResponseEntity<List<LanguageMapper>> getByLanguage(@RequestParam("lang") String lang,
-                                                              @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+    public ResponseEntity<List<LanguageMapper>> getByLanguage(@RequestParam("lang") String lang) {
         return ResponseEntity.ok(categoryService.getByLanguage(lang));
     }
 
