@@ -18,13 +18,12 @@ public class CommentDTO {
     private String articleId;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
-    private LikeStatus status;
     private Boolean visible;
 
     public CommentDTO() {
     }
 
-    public CommentDTO(String id, String content, String replayId, Integer profileId, String articleId, LocalDateTime createdDate, LocalDateTime updateDate, LikeStatus status, Boolean visible) {
+    public CommentDTO(String id, String content, String replayId, Integer profileId, String articleId, LocalDateTime createdDate, LocalDateTime updateDate, Boolean visible) {
         this.id = id;
         this.content = content;
         this.replayId = replayId;
@@ -32,7 +31,6 @@ public class CommentDTO {
         this.articleId = articleId;
         this.createdDate = createdDate;
         this.updateDate = updateDate;
-        this.status = status;
         this.visible = visible;
     }
 }

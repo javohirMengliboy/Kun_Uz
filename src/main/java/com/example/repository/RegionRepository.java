@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface RegionRepository extends CrudRepository<RegionEntity, Integer> {
-
     @Transactional
     @Modifying
     @Query("update RegionEntity set visible = false where id = :id")

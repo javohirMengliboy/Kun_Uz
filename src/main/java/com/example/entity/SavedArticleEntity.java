@@ -3,28 +3,20 @@ package com.example.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-
-
-
 @Getter
 @Setter
 @Entity
 @Table(name = "saved_article")
-public final class SavedArticleEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
+public final class SavedArticleEntity extends BaseStringEntity{
+    @Column(name = "profile_id")
+    private Integer profileId;
     @ManyToOne
-    @JoinColumn(columnDefinition = "profile_id")
-    private ProfileEntity profileId;
+    @JoinColumn(columnDefinition = "profile_id", insertable = false, updatable = false)
+    private ProfileEntity profile;
 
+    @Column(name = "article_id")
+    private String articleId;
     @ManyToOne
-    @JoinColumn(columnDefinition = "article_id")
-    private ArticleEntity articleId;
-
-    @JoinColumn(columnDefinition = "created_date")
-    private LocalDateTime createdDate;
+    @JoinColumn(name = "article_id", insertable = false, updatable = false)
+    private ArticleEntity article;
 }

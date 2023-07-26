@@ -26,10 +26,10 @@ public class AuthService {
             return new ApiResponseDTO(false, "Login or Password not found");
         }
         ProfileEntity profileEntity = optional.get();
-        if (!profileEntity.getPassword().equals(dto.getPassword())) {
+        if (!profileEntity.getPassword().equals(MD5Util.encode(dto.getPassword()))) {
             return new ApiResponseDTO(false, "Login or Password not found");
         }
-        if (!profileEntity.getStatus().equals(ProfileStatus.ACTIVE) || !profileEntity.isVisible()) {
+        if (!profileEntity.getStatus().equals(ProfileStatus.ACTIVE) || !profileEntity.getVisible()) {
             return new ApiResponseDTO(false, "Your status not active. Please contact with support.");
         }
 

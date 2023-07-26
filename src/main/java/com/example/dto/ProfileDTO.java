@@ -22,15 +22,15 @@ public class ProfileDTO {
     private String password;
     private ProfileStatus status;
     private ProfileRole role;
-    private Integer visible;
+    private Boolean visible;
     private LocalDateTime createdDate;
-    private Integer photoId;
+    private String imageId;
     private String jwt;
 
     public ProfileDTO() {
     }
 
-    public ProfileDTO(Integer id, String name, String surname, String email, String phone, String password, ProfileStatus status, ProfileRole role, boolean visible, LocalDateTime createdDate, Integer photoId) {
+    public ProfileDTO(Integer id, String name, String surname, String email, String phone, String password, ProfileStatus status, ProfileRole role, boolean visible, LocalDateTime createdDate, String imageId) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -39,8 +39,8 @@ public class ProfileDTO {
         this.password = password;
         this.status = status;
         this.role = role;
-        this.visible = visible ? 1 : 0;
+        this.visible = visible;
         this.createdDate = createdDate;
-        this.photoId = photoId;
+        this.imageId = imageId;
     }
 }

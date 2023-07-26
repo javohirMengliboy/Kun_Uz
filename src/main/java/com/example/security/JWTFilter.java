@@ -18,10 +18,13 @@ import java.util.Map;
 
 @Component
 public class JWTFilter extends GenericFilterBean {
-//    public static final Map<String, String> openURL = new HashMap<>();
-//    {
-//        openURL.put("/api/v1/auth/login", "");
-//    }
+    public static final Map<String, String> openURL = new HashMap<>();
+    static {
+        openURL.put("/api/v1/auth/login", "");
+        openURL.put("/api/v1/region/by_lang", "");
+        openURL.put("/api/v1/category/by_lang", "");
+        openURL.put("/api/v1/articleType/by_lang", "");
+    }
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
@@ -29,9 +32,9 @@ public class JWTFilter extends GenericFilterBean {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-//        if (openURL.containsKey(request.getRequestURI())) {
-//            filterChain.doFilter(request, response);
-//        }
+        if (openURL.containsKey(request.getRequestURI())) {
+            filterChain.doFilter(request, response);
+        }
 
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

@@ -10,31 +10,30 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "comment")
-public class CommentEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
+public class
+CommentEntity extends BaseStringEntity{
     @Column(name = "content")
     private String content;
 
     @Column(name = "replay_id")
     private String replayId;
-
     @ManyToOne
-    @JoinColumn(name = "profile_id")
-    private ProfileEntity profileId;
+    @JoinColumn(name = "replay_id", insertable = false, updatable = false)
+    private CommentEntity replayComment;
 
+    @Column(name = "profile_id")
+    private Integer profileId;
     @ManyToOne
-    @JoinColumn(name = "article_id")
-    private ArticleEntity articleId;
+    @JoinColumn(name = "profile_id",insertable = false, updatable = false)
+    private ProfileEntity profile;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    @Column(name = "article_id")
+    private String articleId;
+    @ManyToOne
+    @JoinColumn(name = "article_id", insertable = false, updatable = false)
+    private ArticleEntity article;
 
-    @Column(name = "update_date")
+    @JoinColumn(name = "update_date")
     private LocalDateTime updateDate;
 
-    @Column(name = "visible")
-    private Boolean visible;
 }

@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.AttachDTO;
 import com.example.entity.AttachEntity;
 import com.example.exp.AppBadRequestException;
+import com.example.exp.ItemNotFoundException;
 import com.example.repository.AttachRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -31,10 +32,6 @@ public class AttachService {
     private AttachRepository attachRepository;
 
     public String saveToSystem(MultipartFile file) {
-//        System.out.println(file.getSize());
-//        System.out.println(file.getName());
-//        System.out.println(file.getOriginalFilename());
-//        System.out.println(file.getContentType());
         try {
             File folder = new File("attaches");
             if (!folder.exists()) {
@@ -137,9 +134,7 @@ public class AttachService {
     }
 
     public AttachEntity get(String id) {
-        return attachRepository.findById(id).orElseThrow(() -> {
-            throw new AppBadRequestException("File not found");
-        });
+        return attachRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Attach not found"));
     }
 
     public String getYmDString() {

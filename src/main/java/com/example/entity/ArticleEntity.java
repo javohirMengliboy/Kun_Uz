@@ -12,11 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "article")
-public class ArticleEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
+public class ArticleEntity extends BaseStringEntity{
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -27,48 +23,47 @@ public class ArticleEntity {
     private String content;
 
     @Column(name = "shared_count")
-    private Integer sharedCount = 120;
+    private Integer sharedCount = 65;
 
-    @ManyToOne
-    @JoinColumn(name = "attach_id")
-    private AttachEntity attachId;
+    @Column(name = "attach_id")
+    private String attachId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attach_id", insertable = false, updatable = false)
+    private AttachEntity attach;
 
-    @ManyToOne
-    @JoinColumn (name = "region_id")
-    private RegionEntity regionId;
+    @Column (name = "region_id")
+    private Integer regionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "region_id", insertable = false, updatable = false)
+    private RegionEntity region;
 
-    @ManyToOne
-    @JoinColumn (name = "category_id", nullable = false)
-    private CategoryEntity categoryId;
+    @Column (name = "category_id")
+    private Integer categoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "category_id", insertable = false, updatable = false)
+    private CategoryEntity category;
 
-    @ManyToOne
-    @JoinColumn (name = "moderator_id", nullable = false)
-    private ProfileEntity moderatorId;
+    @Column (name = "moderator_id")
+    private Integer moderatorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "moderator_id", insertable = false, updatable = false)
+    private ProfileEntity moderator;
 
-    @ManyToOne
-    @JoinColumn (name = "publisher_id")
-    private ProfileEntity publisherId;
+    @Column (name = "publisher_id")
+    private Integer publisherId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "moderator_id", insertable = false, updatable = false)
+    private ProfileEntity publisher;
 
     @Enumerated(EnumType.STRING)
     private ArticleStatus status = ArticleStatus.PUBLISHED;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate = LocalDateTime.now();
-
     @Column(name = "published_date")
     private LocalDateTime publishedDate = LocalDateTime.now().plusDays(2);
 
-    @Column(name = "visible")
-    private Boolean visible = true;
-
     @Column(name = "view_count")
-    private Integer viewCount = 60;
+    private Integer viewCount = 150;
 
-    @ManyToMany
-    @JoinTable(
-            name = "article_types",
-            joinColumns = @JoinColumn(name = "article_id"),
-            inverseJoinColumns = @JoinColumn(name = "article_type_id")
-    )
-    private List<ArticleTypeEntity> articleTypes;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
+    private List<ArticleAndTypesEntity> articleAndTypesEntities;
 }

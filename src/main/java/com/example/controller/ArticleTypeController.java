@@ -14,31 +14,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/articleType")
 public class ArticleTypeController {
-    @Autowired
     private ArticleTypeService articleTypeService;
+    @Autowired
+    public void setArticleTypeService(ArticleTypeService articleTypeService) {
+        this.articleTypeService = articleTypeService;
+    }
 
-    @PostMapping(value = "/admin")
+    @PostMapping(value = "")
     public ResponseEntity<?> create(@RequestBody ArticleTypeDTO dto,
                                     @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(articleTypeService.create(dto));
     }
 
-    @PutMapping(value = "/admin/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> updateOrderById(@RequestBody ArticleTypeDTO dto,
                                                    @PathVariable("id") Integer id,
                                                    @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(articleTypeService.update(dto, id));
     }
-    @DeleteMapping(value = "/admin/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id,
                                               @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
         return ResponseEntity.ok(articleTypeService.deleteArticleTypeById(id));
     }
 
-    @GetMapping(value = "/admin")
+    @GetMapping(value = "")
     public ResponseEntity<List<ArticleTypeDTO>> getAll(
             @RequestHeader("Authorization") String authToken) {
         SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);

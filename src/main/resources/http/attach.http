@@ -2,9 +2,9 @@ POST http://localhost:8080/api/v1/attach/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="Ta'lim_uchun_30_pora___97___Qadr_surasi_سورة_القدر___Jahongir_qori.mp4"
+Content-Disposition: form-data; name="file"; filename="zWBSmqHyIOKG4f8UeaEm65p89GnQPIw-.jpg"
 
-< J:\Java\Image\Ta'lim_uchun_30_pora___97___Qadr_surasi_سورة_القدر___Jahongir_qori.mp4
+< J:\Java\Image\zWBSmqHyIOKG4f8UeaEm65p89GnQPIw-.jpg
 
 
 ### get image
@@ -17,8 +17,8 @@ GET http://localhost:8080/api/v1/attach/open/ac202ae9-e728-4f76-a053-afa54ec5061
 GET http://localhost:8080/api/v1/attach/open/7c7768d5-f0c4-420c-b19d-3a91d2c370e3/general
 
 ### get pagination
-GET http://localhost:8080/api/v1/attach/admin/pagination?page=2&size=2
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAxOTcyMTUsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2OTAyODM2MTUsImlzcyI6Imt1bnV6IHRlc3QgcG9ydGFsaSJ9.Cbn3Fv8I2QNQ5Fy98SVlTEUFVQuOQAj6x4n0nK48mv42cztSrhjhyQ1w9zAhu38MKub9KJhUw5hOmbEX2a7rgQ
+GET http://localhost:8080/api/v1/attach/admin/pagination?page=1&size=30
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzMTc3OTAsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDA0MTkwLCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.fpAxGi1sTZK-EXWlTPALlS3TMgbV5OILgeoj9KTiX_uy9UPJWbK7PHnuZaz3VTSwYRuFqhn5rOI5wgbeQ6ZRHw
 
 
 ### delete by id

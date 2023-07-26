@@ -6,12 +6,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
 @Table(name = "profile")
-public class ProfileEntity {
+public class ProfileEntity extends BaseIntegerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -39,14 +38,10 @@ public class ProfileEntity {
     @Enumerated(EnumType.STRING)
     private ProfileRole role;
 
-    @Column(name = "visible")
-    private boolean visible = true;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    @Column(name = "photo_id")
-    private Integer photoId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "image_id")
+    private AttachEntity image;
 
     @Column(name = "prt_id")
     private Integer prtId;

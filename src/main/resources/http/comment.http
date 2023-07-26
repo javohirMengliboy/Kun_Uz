@@ -1,0 +1,47 @@
+### 1. Create
+POST localhost:8080/api/v1/comment
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDQ2NDI2LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.CBKbPczBG-79JHrYy95CTdKd-cLEO56wJNBNXJsMy-hPnPf6_3ueXHbkpff5-n0uxFCbb_21gcMUP6ODvxaCMw
+
+{
+  "content": "comment 6",
+  "articleId": "feac63d6-d503-4fb8-aed1-2da352b323c3"
+}
+
+### 2. Update
+PUT localhost:8080/api/v1/comment/b9746332-a0dc-4dba-bba5-822c86e8cdb5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDQ2NDI2LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.CBKbPczBG-79JHrYy95CTdKd-cLEO56wJNBNXJsMy-hPnPf6_3ueXHbkpff5-n0uxFCbb_21gcMUP6ODvxaCMw
+
+{
+  "content": "comment 3",
+  "articleId": "aa685d61-f897-40d5-bc35-975d9ccdcf1f"
+}
+
+### 3. Delete
+DELETE localhost:8080/api/v1/comment/81aed5cf-9c7e-4dee-b0f8-9b1ec2f32d57
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDQ2NDI2LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.CBKbPczBG-79JHrYy95CTdKd-cLEO56wJNBNXJsMy-hPnPf6_3ueXHbkpff5-n0uxFCbb_21gcMUP6ODvxaCMw
+
+
+### 4. Get By Article Id
+GET localhost:8080/api/v1/comment/by_article?articleId=feac63d6-d503-4fb8-aed1-2da352b323c3
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDQ2NDI2LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.CBKbPczBG-79JHrYy95CTdKd-cLEO56wJNBNXJsMy-hPnPf6_3ueXHbkpff5-n0uxFCbb_21gcMUP6ODvxaCMw
+
+### 5. Get Pagination
+GET localhost:8080/api/v1/comment/pagination?page=1&size=10
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNzM2NzgsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2OTA0NjAwNzgsImlzcyI6Imt1bnV6IHRlc3QgcG9ydGFsaSJ9.rWLAXHzACJQPXoWq8L8NOr22Rpff2qGc7tLyMHyM46RZy2xxFKmYz04D8AHhThC34MpHa0tQ-w-aJyMkMmyKpQ
+
+
+### 6. Get Filter
+POST localhost:8080/api/v1/comment/filter?page=1&size=4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNzM2NzgsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2OTA0NjAwNzgsImlzcyI6Imt1bnV6IHRlc3QgcG9ydGFsaSJ9.rWLAXHzACJQPXoWq8L8NOr22Rpff2qGc7tLyMHyM46RZy2xxFKmYz04D8AHhThC34MpHa0tQ-w-aJyMkMmyKpQ
+
+{
+  "articleId": "aa685d61-f897-40d5-bc35-975d9ccdcf1f"
+}
+
+
+### 7. Get By Replay Id
+GET localhost:8080/api/v1/comment/by_replay?replayId=71ec8ddf-24b5-4e5f-94b6-9b9c30e1126d
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDQ2NDI2LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.CBKbPczBG-79JHrYy95CTdKd-cLEO56wJNBNXJsMy-hPnPf6_3ueXHbkpff5-n0uxFCbb_21gcMUP6ODvxaCMw

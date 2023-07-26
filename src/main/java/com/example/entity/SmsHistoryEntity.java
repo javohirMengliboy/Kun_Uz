@@ -5,21 +5,11 @@ import com.example.enums.SmsType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-
-import java.time.LocalDateTime;
-
-
-
 @Getter
 @Setter
 @Entity
 @Table(name = "sms_history")
-public class SmsHistoryEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
+public class SmsHistoryEntity extends BaseStringEntity{
     @Column(name = "phone")
     private String phone;
 
@@ -31,7 +21,4 @@ public class SmsHistoryEntity {
 
     @Column(name = "type")
     private SmsType type;
-
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
 }

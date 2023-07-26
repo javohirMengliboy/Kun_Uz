@@ -37,8 +37,6 @@ public class SecurityUtil {
     public static JwtDTO hasRole(HttpServletRequest request, ProfileRole... requiredRoles) {
         Integer id = (Integer) request.getAttribute("id");
         ProfileRole role = (ProfileRole) request.getAttribute("role");
-
-        System.out.println(role+"  "+ Arrays.stream(requiredRoles).toList());
         if (requiredRoles == null){
             return new JwtDTO(id,role);
         }

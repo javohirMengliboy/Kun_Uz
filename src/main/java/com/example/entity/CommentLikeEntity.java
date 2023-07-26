@@ -5,27 +5,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Entity
 @Table(name = "comment_like")
-public final class CommentLikeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
+public final class CommentLikeEntity extends BaseStringEntity{
+    @Column(name = "profile_id")
+    private Integer profileId;
     @ManyToOne
-    @JoinColumn(columnDefinition = "profile_id")
-    private ProfileEntity profileId;
+    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
+    private ProfileEntity profile;
 
+    @Column(name = "comment_id")
+    private String commentId;
     @ManyToOne
-    @JoinColumn(columnDefinition = "article_id")
-    private CommentEntity articleId;
-
-    @JoinColumn(columnDefinition = "created_date")
-    private LocalDateTime createdDate;
+    @JoinColumn(name = "article_id", insertable = false, updatable = false)
+    private CommentEntity comment;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

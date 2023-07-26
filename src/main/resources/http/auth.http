@@ -1,8 +1,26 @@
-### Create pofile
+### login ADMIN
+POST localhost:8080/api/v1/auth/login
+Content-Type:  application/json
+
+{
+  "phone": "+998996742127",
+  "password": "Java_1java"
+}
+
+### login PUBLISHER
 POST localhost:8080/api/v1/auth/login
 Content-Type:  application/json
 
 {
   "phone": "+998901112233",
-  "password": "ali1"
+  "password": "Aziz1"
+}
+
+### login MODERATOR
+POST localhost:8080/api/v1/auth/login
+Content-Type:  application/json
+
+{
+"phone": "+998991113344",
+"password": "Farrux1"
 }

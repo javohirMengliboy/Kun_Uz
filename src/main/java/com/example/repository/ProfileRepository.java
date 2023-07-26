@@ -22,8 +22,6 @@ public interface ProfileRepository extends CrudRepository<ProfileEntity, Integer
     int updateStatusById(@Param("status") ProfileStatus status, @Param("id") Integer id);
 
     /** 4 */
-    @Query("select new com.example.dto.ProfileDTO(id, name, surname, email, phone, password, status, role, visible, createdDate, photoId) from ProfileEntity")
-    List<ProfileDTO> getAll();
 
     @Transactional
     @Modifying

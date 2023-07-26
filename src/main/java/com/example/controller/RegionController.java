@@ -5,6 +5,7 @@ import com.example.enums.ProfileRole;
 import com.example.mapper.LanguageMapper;
 import com.example.service.RegionService;
 import com.example.util.SecurityUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,33 +15,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/region")
 public class RegionController {
-    @Autowired
     private RegionService regionService;
+    @Autowired
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
+    }
 
-    @PostMapping(value = "/admin")
-    public ResponseEntity<?> create(@RequestBody RegionDTO dto,
-                                    @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+    @PostMapping(value = "")
+    public ResponseEntity<RegionDTO> create(@RequestBody RegionDTO dto,
+                                    HttpServletRequest request) {
+        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.create(dto));
     }
 
-    @PutMapping(value = "/admin/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> updateOrderById(@RequestBody RegionDTO dto,
                                                    @PathVariable("id") Integer id,
-                                                   @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+                                                   HttpServletRequest request) {
+        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.update(dto, id));
     }
-    @DeleteMapping(value = "/admin/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id,
-                                              @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+                                              HttpServletRequest request) {
+        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.deleteRegionById(id));
     }
 
-    @GetMapping(value = "/admin")
-    public ResponseEntity<List<RegionDTO>> getAll(@RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+    @GetMapping(value = "")
+    public ResponseEntity<List<RegionDTO>> getAll(HttpServletRequest request) {
+        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.getAll());
     }
 

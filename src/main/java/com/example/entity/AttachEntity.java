@@ -3,16 +3,11 @@ package com.example.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
 @Table(name = "attach")
-public class AttachEntity {
-    @Id
-    private String id;
-
+public class AttachEntity extends BaseStringEntity{
     @Column(name = "original_name")
     private String originalName;
 
@@ -25,6 +20,6 @@ public class AttachEntity {
     @Column(name = "extension", nullable = false)
     private String extension;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate = LocalDateTime.now();
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "image")
+    private ProfileEntity profileEntity;
 }

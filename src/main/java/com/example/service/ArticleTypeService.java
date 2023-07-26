@@ -6,6 +6,7 @@ import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.mapper.LanguageMapper;
 import com.example.repository.ArticleTypeRepository;
+import com.example.util.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,11 @@ import java.util.Optional;
 
 @Service
 public class ArticleTypeService {
-    @Autowired
     private ArticleTypeRepository articleTypeRepository;
+    @Autowired
+    public void setArticleTypeRepository(ArticleTypeRepository articleTypeRepository) {
+        this.articleTypeRepository = articleTypeRepository;
+    }
 
     public ArticleTypeDTO create(ArticleTypeDTO dto) {
         Optional<ArticleTypeEntity> optional = articleTypeRepository.findByOrderNumber(dto.getOrderNumber());
@@ -30,20 +34,20 @@ public class ArticleTypeService {
         entity.setNameEng(dto.getNameEng());
         articleTypeRepository.save(entity);
         dto.setId(entity.getId());
-        dto.setVisible(entity.isVisible());
+        dto.setVisible(entity.getVisible());
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }
 
     public Boolean update(ArticleTypeDTO dto, Integer id) {
-        articleTypeRepository.save(checkingForUpdate(dto, articleTypeRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"))));
+        articleTypeRepository.save(checkingForUpdate(dto, get(id)));
         return true;
     }
 
 
 
     public Boolean deleteArticleTypeById(Integer id) {
-        articleTypeRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"));
+        get(id);
         int effectedRows = articleTypeRepository.deleteArticleTypeById(id);
         return effectedRows > 0;
     }
@@ -58,40 +62,22 @@ public class ArticleTypeService {
         return dtoList;
     }
 
-
-
     public List<LanguageMapper> getByLanguage(String lang) {
-        List<LanguageMapper> mapperList = new ArrayList<>();
-        articleTypeRepository.getRegionByLanguage(lang).forEach(temp -> {
-            LanguageMapper mapper = new LanguageMapper();
-            mapper.setId(temp.getId());
-            mapper.setOrderNumber(temp.getOrderNumber());
-            mapper.setName(temp.getName());
-            mapperList.add(mapper);
-        });
-        return mapperList;
+        return ServiceUtil.getByLanguage(articleTypeRepository.getArticleTypeByLanguage(lang));
     }
 
 
     private ArticleTypeEntity checkingForUpdate(ArticleTypeDTO dto, ArticleTypeEntity entity) {
-        if (dto.getOrderNumber() != null){
-            entity.setOrderNumber(dto.getOrderNumber());
-        }
-        if (dto.getNameUz() != null){
-            entity.setNameUz(dto.getNameUz());
-        }
-        if (dto.getNameRu() != null){
-            entity.setNameRu(dto.getNameRu());
-        }
-        if (dto.getNameEng() != null){
-            entity.setNameEng(dto.getNameEng());
-        }
-        return entity;
+        return (ArticleTypeEntity) ServiceUtil.checkingForUpdate(dto, entity);
     }
 
     private ArticleTypeDTO toDto(ArticleTypeEntity entity) {
-        return new ArticleTypeDTO(entity.getId(), entity.getOrderNumber(),
-                entity.getNameUz(), entity.getNameRu(), entity.getNameRu(),
-                entity.isVisible(), entity.getCreatedDate());
+        return new ArticleTypeDTO(entity.getId(), entity.getVisible(),
+                entity.getCreatedDate(), entity.getOrderNumber(),
+                entity.getNameUz(), entity.getNameRu(), entity.getNameEng());
+    }
+
+    public ArticleTypeEntity get(Integer typeId) {
+        return articleTypeRepository.findById(typeId).orElseThrow(() -> new ItemNotFoundException("ArticleType not found"));
     }
 }

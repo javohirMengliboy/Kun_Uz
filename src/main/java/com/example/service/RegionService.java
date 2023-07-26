@@ -1,11 +1,11 @@
 package com.example.service;
-
 import com.example.dto.RegionDTO;
 import com.example.entity.RegionEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.mapper.LanguageMapper;
 import com.example.repository.RegionRepository;
+import com.example.util.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +15,11 @@ import java.util.Optional;
 
 @Service
 public class RegionService {
-    @Autowired
     private RegionRepository regionRepository;
+    @Autowired
+    public void setRegionRepository(RegionRepository regionRepository) {
+        this.regionRepository = regionRepository;
+    }
 
     public RegionDTO create(RegionDTO dto) {
         Optional<RegionEntity> optional = regionRepository.findByOrderNumber(dto.getOrderNumber());
@@ -30,20 +33,20 @@ public class RegionService {
         entity.setNameEng(dto.getNameEng());
         regionRepository.save(entity);
         dto.setId(entity.getId());
-        dto.setVisible(entity.isVisible());
+        dto.setVisible(entity.getVisible());
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }
 
     public Boolean update(RegionDTO dto, Integer id) {
-        regionRepository.save(checkingForUpdate(dto, regionRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"))));
+        regionRepository.save(checkingForUpdate(dto, get(id)));
         return true;
     }
 
 
 
     public Boolean deleteRegionById(Integer id) {
-        regionRepository.findById(id).orElseThrow(() -> new AppBadRequestException("Category not found"));
+        get(id);
         int effectedRows = regionRepository.deleteRegionById(id);
         return effectedRows > 0;
     }
@@ -61,38 +64,21 @@ public class RegionService {
 
 
     public List<LanguageMapper> getByLanguage(String lang) {
-        List<LanguageMapper> mapperList = new ArrayList<>();
-        regionRepository.getRegionByLanguage(lang).forEach(temp -> {
-            LanguageMapper mapper = new LanguageMapper();
-            mapper.setId(temp.getId());
-            mapper.setOrderNumber(temp.getOrderNumber());
-            mapper.setName(temp.getName());
-            mapperList.add(mapper);
-        });
-        return mapperList;
+        return ServiceUtil.getByLanguage(regionRepository.getRegionByLanguage(lang));
     }
 
 
     private RegionEntity checkingForUpdate(RegionDTO dto, RegionEntity entity) {
-        if (dto.getOrderNumber() != null){
-            entity.setOrderNumber(dto.getOrderNumber());
-        }
-        if (dto.getNameUz() != null){
-            entity.setNameUz(dto.getNameUz());
-        }
-        if (dto.getNameRu() != null){
-            entity.setNameRu(dto.getNameRu());
-        }
-        if (dto.getNameEng() != null){
-            entity.setNameEng(dto.getNameEng());
-        }
-        return entity;
+        return (RegionEntity) ServiceUtil.checkingForUpdate(dto, entity);
     }
 
     private RegionDTO toDto(RegionEntity entity) {
         return new RegionDTO(entity.getId(), entity.getOrderNumber(),
                 entity.getNameUz(), entity.getNameRu(), entity.getNameRu(),
-                entity.isVisible(), entity.getCreatedDate());
+                entity.getVisible(), entity.getCreatedDate());
     }
 
+    public RegionEntity get(Integer regionId) {
+       return regionRepository.findById(regionId).orElseThrow(() -> new ItemNotFoundException("Region not found"));
+    }
 }

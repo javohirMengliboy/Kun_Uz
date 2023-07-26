@@ -20,7 +20,7 @@ public interface ArticleTypeRepository extends CrudRepository<ArticleTypeEntity,
     int deleteArticleTypeById(Integer id);
 
     @Query(value = "select id, order_number as orderNumber, case :lang when 'uz' then name_uz when 'ru' then name_ru when 'en' then name_eng end as name from article_type", nativeQuery = true)
-    List<LanguageI> getRegionByLanguage(@Param("lang") String lang);
+    List<LanguageI> getArticleTypeByLanguage(@Param("lang") String lang);
 
     Optional<ArticleTypeEntity> findByOrderNumber(Integer orderNumber);
 

@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.FilterResultDTO;
 import com.example.dto.ProfileDTO;
 import com.example.dto.ProfileFilterDTO;
+import com.example.entity.AttachEntity;
 import com.example.entity.ProfileEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
@@ -25,7 +26,10 @@ public class ProfileService {
 
     @Autowired
     private ProfileCustomRepository profileCustomRepository;
-    /** 1 */
+
+    @Autowired
+    private AttachService attachService;
+
     public ProfileDTO create(ProfileDTO dto, Integer ptrId) {
         check(dto);
         Optional<ProfileEntity> emailEntity = profileRepository.findByEmail(dto.getEmail());
@@ -34,71 +38,70 @@ public class ProfileService {
         }
         Optional<ProfileEntity> phoneEntity = profileRepository.findByPhone(dto.getPhone());
         if (phoneEntity.isPresent()){
-            throw new AppBadRequestException("This phone already exists");
+            throw new AppBadRequestException("This phone e already exists");
         }
-
 
         ProfileEntity entity = new ProfileEntity();
         entity.setName(dto.getName());
         entity.setSurname(dto.getSurname());
         entity.setEmail(dto.getEmail());
         entity.setPhone(dto.getPhone());
-        entity.setPassword(dto.getPassword());
+        entity.setPassword(MD5Util.encode(dto.getPassword()));
         entity.setStatus(dto.getStatus());
         entity.setRole(dto.getRole());
         entity.setPrtId(ptrId);
+        if (dto.getImageId() != null){
+            entity.setImage(attachService.get(dto.getImageId()));
+        }
         profileRepository.save(entity);
         dto.setId(entity.getId());
-        dto.setVisible(entity.isVisible() ? 1 : 0);
+        dto.setVisible(entity.getVisible());
         dto.setCreatedDate(entity.getCreatedDate());
-
         return dto;
     }
 
-
-
-
-
-    /** 2 */
-    public Boolean updateForAdmin(ProfileDTO dto, Integer id) {
-        profileRepository.save(checkingForUpdate(dto,profileRepository.findById(id).orElseThrow(() ->
-                new ItemNotFoundException("Profile not found"))));
+    public Boolean update(ProfileDTO dto, Integer id) {
+        profileRepository.save(checkingForUpdate(dto,get(id)));
         return true;
     }
 
-    public Boolean updateForUser(Integer id, ProfileDTO dto) {
-        ProfileEntity entity = profileRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Profile not found"));
-        profileRepository.save(checkingForUpdate(dto,entity));
+    public Boolean updateDetail(Integer id, ProfileDTO dto) {
+        profileRepository.save(checkingForUpdate(dto,get(id)));
         return true;
     }
 
     private ProfileEntity checkingForUpdate(ProfileDTO dto, ProfileEntity entity) {
+        if (dto == null){
+            throw new AppBadRequestException("No data found to change");
+        }
         if (dto.getName() != null){
+            checkingName(dto.getName());
             entity.setName(dto.getName());
         }
         if (dto.getSurname() != null){
+            checkingSurname(dto.getSurname());
             entity.setSurname(dto.getSurname());
         }
         if (dto.getEmail() != null){
+            checkingEmail(dto.getEmail());
             entity.setEmail(dto.getEmail());
         }
         if (dto.getPhone() != null){
+            checkingPhone(dto.getPhone());
             entity.setPhone(dto.getPhone());
         }
         if (dto.getPassword() != null){
+            checkingPassword(dto.getPassword());
             entity.setPassword(MD5Util.encode(dto.getPassword()));
         }
-        if (dto.getPhotoId() != null){
-            entity.setPhotoId(dto.getPhotoId());
+        if (dto.getImageId() != null){
+            entity.setImage(attachService.get(dto.getImageId()));
         }
         if (dto.getStatus() != null){
             entity.setStatus(dto.getStatus());
         }
         if (dto.getRole() != null){
             entity.setRole(dto.getRole());
-        }
-        if (dto.getVisible() != null){
-            entity.setVisible(dto.getVisible() != 0);
         }
         return entity;
     }
@@ -117,7 +120,7 @@ public class ProfileService {
     private ProfileDTO toDto(ProfileEntity entity) {
         return new ProfileDTO(entity.getId(), entity.getName(), entity.getSurname(),
                 entity.getEmail(), entity.getPhone(), entity.getPassword(), entity.getStatus(),
-                entity.getRole(), entity.isVisible(), entity.getCreatedDate(), entity.getPhotoId());
+                entity.getRole(), entity.getVisible(), entity.getCreatedDate(), entity.getImage().getId());
     }
 
     /** 5 */
@@ -127,8 +130,8 @@ public class ProfileService {
     }
 
     /** 7 */
-    public PageImpl<ProfileDTO> filter(ProfileFilterDTO dto,Integer page, Integer size) {
-        FilterResultDTO result = profileCustomRepository.filter(dto, page,  size);
+    public PageImpl<ProfileDTO> filter(ProfileFilterDTO filterDTO,Integer page, Integer size) {
+        FilterResultDTO result = profileCustomRepository.filter(filterDTO, page-1,  size);
         List<ProfileDTO> dtoList = result.getList();
         return new PageImpl<>(dtoList, PageRequest.of(page,size), result.totalCount);
     }
@@ -178,9 +181,7 @@ public class ProfileService {
         if (value.length() < 3 || value.isBlank()){
             throw new AppBadRequestException("There are not enough characters");
         }
-        if (value.charAt(0) < 64 || value.charAt(0) > 91) {
-            throw new AppBadRequestException("Note the capital letter");
-        }
+        isCapital(value);
         char[] arr = value.toCharArray();
         for (char c : arr) {
             if (c > 32 && c < 58) {
@@ -193,9 +194,7 @@ public class ProfileService {
         if (value.length() < 2 || value.isBlank()){
             throw new AppBadRequestException("There are not enough characters");
         }
-        if (value.charAt(0) < 64 || value.charAt(0) > 91) {
-            throw new AppBadRequestException("Note the capital letter");
-        }
+        isCapital(value);
         char[] arr = value.toCharArray();
         for (char c : arr) {
             if (c > 32 && c < 58) {
@@ -221,5 +220,21 @@ public class ProfileService {
         return bool;
     }
 
+    public void isCapital(String value){
+        if (value.charAt(0) < 64 || value.charAt(0) > 91) {
+            throw new AppBadRequestException("Note the capital letter");
+        }
+    }
 
+    public ProfileEntity get(Integer id){
+        return profileRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Profile not found"));
+    }
+
+
+    public String updateImage(Integer id, ProfileDTO dto) {
+        ProfileEntity entity = get(id);
+        entity.setImage(attachService.get(dto.getImageId()));
+        profileRepository.save(entity);
+        return "Image setted";
+    }
 }

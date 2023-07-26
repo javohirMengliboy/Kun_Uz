@@ -11,41 +11,64 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
 @Service
 public class ArticleService {
-    @Autowired
     private ArticleRepository articleRepository;
     @Autowired
-    private ProfileRepository profileRepository;
+    public void setArticleRepository(ArticleRepository articleRepository) {
+        this.articleRepository = articleRepository;
+    }
+
+    private AttachService attachService;
     @Autowired
-    private CategoryRepository categoryRepository;
+    public void setAttachService(AttachService attachService) {
+        this.attachService = attachService;
+    }
+
+    private CategoryService categoryService;
     @Autowired
-    private RegionRepository regionRepository;
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    private RegionService regionService;
     @Autowired
-    private ArticleTypeRepository articleTypeRepository;
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
+    }
+
+    private ProfileService profileService;
     @Autowired
-    private ProfileCustomRepository profileCustomRepository;
+    public void setProfileService(ProfileService profileService) {
+        this.profileService = profileService;
+    }
+
+    private ArticleTypeService articleTypeService;
+    @Autowired
+    public void setArticleTypeService(ArticleTypeService articleTypeService) {
+        this.articleTypeService = articleTypeService;
+    }
+
+
     /** 1 */
     public ArticleDTO create(ArticleDTO dto,Integer moderatorId) {
-//        Optional<AttachEntity> optionalAttach = attachRepository.findById(dto.getAttachId());
-//        if (optionalAttach.isEmpty()){
-//            throw new ItemNotFoundException("Attach not found");
-//        }
+        AttachEntity attach = attachService.get(dto.getAttachId());
+        if (attach == null){
+            throw new ItemNotFoundException("Attach not found");
+        }
 
-        Optional<CategoryEntity> optionalCategory = categoryRepository.findById(dto.getCategoryId());
-        if (optionalCategory.isEmpty()){
+        CategoryEntity category = categoryService.get(dto.getCategoryId());
+        if (category == null){
             throw new ItemNotFoundException("Category not found");
         }
 
-        Optional<RegionEntity> optionalRegion = regionRepository.findById(dto.getRegionId());
-        if (optionalRegion.isEmpty()){
+        RegionEntity region = regionService.get(dto.getRegionId());
+        if (region == null){
             throw new ItemNotFoundException("Region not found");
         }
 
-        Optional<ProfileEntity> optionalModerator = profileRepository.findById(moderatorId);
-        if (optionalModerator.isEmpty()){
+        ProfileEntity moderator = profileService.get(moderatorId);
+        if (moderator == null){
             throw new ItemNotFoundException("Moderator not found");
         }
         ArticleEntity entity = new ArticleEntity();
@@ -53,25 +76,16 @@ public class ArticleService {
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setContent(dto.getContent());
-//        entity.setAttachId(optionalAttach.get());
-        entity.setRegionId(optionalRegion.get());
-        entity.setCategoryId(optionalCategory.get());
-        entity.setModeratorId(optionalModerator.get());
-        List<ArticleTypeEntity> allType = new ArrayList<>();
-        for (Integer i : dto.getArticleTypes()){
-            Optional<ArticleTypeEntity> optional = articleTypeRepository.findById(i);
-            if (optional.isEmpty()){
-                throw new ItemNotFoundException(i+" id type not found");
-            }
-            allType.add(optional.get());
-        }
+        entity.setAttachId(dto.getAttachId());
+        entity.setRegionId(region.getId());
+        entity.setCategoryId(category.getId());
+        entity.setModeratorId(moderator.getId());
 
-        entity.setArticleTypes(allType);
         articleRepository.save(entity);
         dto.setId(entity.getId());
         dto.setSharedCount(entity.getSharedCount());
-        dto.setModeratorId(entity.getModeratorId().getId());
-//        dto.setPublisherId(entity.getPublisherId().getId());
+        dto.setModeratorId(entity.getModeratorId());
+        dto.setPublisherId(entity.getPublisherId());
         dto.setStatus(entity.getStatus());
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setPublishedDate(entity.getPublishedDate());
@@ -102,11 +116,10 @@ public class ArticleService {
     }
 
     private ArticleDTO toDto(ArticleEntity entity) {
-        return new ArticleDTO(entity.getId(), entity.getTitle(), entity.getDescription(),
-                entity.getContent(), entity.getSharedCount(), entity.getRegionId().getId(),
-                entity.getCategoryId().getId(), entity.getModeratorId().getId(), entity.getPublisherId().getId(), entity.getStatus(),
-                entity.getCreatedDate(),entity.getPublishedDate(),entity.getVisible(), entity.getViewCount(),
-                entity.getArticleTypes().stream().map(ArticleTypeEntity::getId).collect(Collectors.toList()));
+        return new ArticleDTO(entity.getId(), entity.getVisible(), entity.getCreatedDate(),
+                entity.getTitle(), entity.getDescription(), entity.getContent(), entity.getSharedCount(),
+                entity.getAttachId(), entity.getRegionId(), entity.getCategoryId(), entity.getModeratorId(),
+                entity.getPublisherId(), entity.getStatus(), entity.getPublishedDate(), entity.getViewCount());
     }
 
     /** 5 */
@@ -139,7 +152,7 @@ public class ArticleService {
     }
 
     public List<ArticleGetMapper> getByTypeNotId(String id, Integer type) {
-        ArticleTypeEntity typeEntity = articleTypeRepository.findById(type).orElseThrow(()-> new ItemNotFoundException("Type not found"));
+        ArticleTypeEntity typeEntity = articleTypeService.get(type);
 
         List<ArticleMapper> mapperList = articleRepository.getByTypeNotId(id,type);
         if (mapperList.isEmpty()){
@@ -151,5 +164,9 @@ public class ArticleService {
             getMappers.add(getMapper);
         });
         return getMappers;
+    }
+
+    public ArticleEntity get(String articleId) {
+        return articleRepository.findById(articleId).orElseThrow(() -> new ItemNotFoundException("Article not found"));
     }
 }

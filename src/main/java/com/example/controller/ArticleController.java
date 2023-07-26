@@ -25,7 +25,6 @@ public class ArticleController {
     public ResponseEntity<?> create(@RequestBody ArticleDTO dto,
                                     HttpServletRequest request){
         JwtDTO jwtDTO = SecurityUtil.hasRole(request, ProfileRole.MODERATOR);
-        System.out.println("control "+jwtDTO.getId()+" "+ jwtDTO.getRole());
         return ResponseEntity.ok(articleService.create(dto, jwtDTO.getId()));
     }
 
