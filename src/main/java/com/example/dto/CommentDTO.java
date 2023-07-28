@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class CommentDTO {
-    private String id;
+    private Integer id;
     private String content;
     private String replayId;
     private Integer profileId;
@@ -23,7 +23,7 @@ public class CommentDTO {
     public CommentDTO() {
     }
 
-    public CommentDTO(String id, String content, String replayId, Integer profileId, String articleId, LocalDateTime createdDate, LocalDateTime updateDate, Boolean visible) {
+    public CommentDTO(Integer id, String content, String replayId, Integer profileId, String articleId, LocalDateTime createdDate, LocalDateTime updateDate, Boolean visible) {
         this.id = id;
         this.content = content;
         this.replayId = replayId;

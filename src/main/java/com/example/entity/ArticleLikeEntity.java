@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "article_like")
-public final class ArticleLikeEntity extends BaseStringEntity{
+public final class ArticleLikeEntity extends BaseIdentityEntity{
     @Column(name = "profile_id")
     private Integer profileId;
     @ManyToOne

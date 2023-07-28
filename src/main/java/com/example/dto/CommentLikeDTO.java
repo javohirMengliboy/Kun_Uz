@@ -11,16 +11,16 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class CommentLikeDTO {
-    private String id;
+    private Integer id;
     private Integer profileId;
-    private String commentId;
+    private Integer commentId;
     private LocalDateTime createdDate;
     private LikeStatus status;
 
     public CommentLikeDTO() {
     }
 
-    public CommentLikeDTO(String id, Integer profileId, String commentId, LocalDateTime createdDate, LikeStatus status) {
+    public CommentLikeDTO(Integer id, Integer profileId, Integer commentId, LocalDateTime createdDate, LikeStatus status) {
         this.id = id;
         this.profileId = profileId;
         this.commentId = commentId;

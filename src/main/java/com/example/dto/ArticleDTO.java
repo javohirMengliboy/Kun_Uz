@@ -26,6 +26,7 @@ public class ArticleDTO extends BaseDTO{
     private LocalDateTime publishedDate;
     private Integer viewCount;
     private List<Integer> articleTypes;
+    private List<Integer> articleTags;
 
 
 

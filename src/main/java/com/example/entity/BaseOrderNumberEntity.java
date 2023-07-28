@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @MappedSuperclass
-public class BaseOrderNumberEntity extends BaseIntegerEntity{
+public class BaseOrderNumberEntity extends BaseSequenceEntity {
     @Column(name = "order_number", unique = true)
     private Integer orderNumber;
 

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "comment_like")
-public final class CommentLikeEntity extends BaseStringEntity{
+public final class CommentLikeEntity extends BaseIdentityEntity{
     @Column(name = "profile_id")
     private Integer profileId;
     @ManyToOne
@@ -17,7 +17,7 @@ public final class CommentLikeEntity extends BaseStringEntity{
     private ProfileEntity profile;
 
     @Column(name = "comment_id")
-    private String commentId;
+    private Integer commentId;
     @ManyToOne
     @JoinColumn(name = "article_id", insertable = false, updatable = false)
     private CommentEntity comment;

@@ -10,10 +10,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "profile")
-public class ProfileEntity extends BaseIntegerEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class ProfileEntity extends BaseIdentityEntity {
 
     @Column(name = "name", nullable = false)
     private String name;

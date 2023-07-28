@@ -1,4 +1,4 @@
-package com.example.security;
+package com.example.config;
 
 import com.example.dto.JwtDTO;
 import com.example.exp.UnAuthorizedException;
@@ -13,18 +13,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class JWTFilter extends GenericFilterBean {
-    public static final Map<String, String> openURL = new HashMap<>();
-    static {
-        openURL.put("/api/v1/auth/login", "");
-        openURL.put("/api/v1/region/by_lang", "");
-        openURL.put("/api/v1/category/by_lang", "");
-        openURL.put("/api/v1/articleType/by_lang", "");
-    }
+//    public static final Map<String, String> openURL = new HashMap<>();
+//    static {
+//        openURL.put("/api/v1/auth/login", "");
+//        openURL.put("/api/v1/region/by_lang", "");
+//        openURL.put("/api/v1/category/by_lang", "");
+//        openURL.put("/api/v1/articleType/by_lang", "");
+//        openURL.put("/api/v1/article/get/four_most_read", "");
+//    }
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
@@ -32,9 +31,9 @@ public class JWTFilter extends GenericFilterBean {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        if (openURL.containsKey(request.getRequestURI())) {
-            filterChain.doFilter(request, response);
-        }
+//        if (openURL.containsKey(request.getRequestURI())) {
+//            filterChain.doFilter(request, response);
+//        }
 
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

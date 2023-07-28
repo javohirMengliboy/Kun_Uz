@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class ArticleLikeDTO {
-    private String id;
+    private Integer id;
     private Integer profileId;
     private String articleId;
     private LocalDateTime createdDate;
@@ -19,7 +19,7 @@ public class ArticleLikeDTO {
     public ArticleLikeDTO() {
     }
 
-    public ArticleLikeDTO(String id, Integer profileId, String articleId, LocalDateTime createdDate, LikeStatus status) {
+    public ArticleLikeDTO(Integer id, Integer profileId, String articleId, LocalDateTime createdDate, LikeStatus status) {
         this.id = id;
         this.profileId = profileId;
         this.articleId = articleId;

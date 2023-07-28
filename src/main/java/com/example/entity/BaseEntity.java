@@ -1,6 +1,7 @@
 package com.example.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,11 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @MappedSuperclass
-public class BaseIntegerEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
-
+public class BaseEntity {
     @Column(name = "visible")
     private Boolean visible = Boolean.TRUE;
 

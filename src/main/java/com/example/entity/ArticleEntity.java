@@ -66,4 +66,7 @@ public class ArticleEntity extends BaseStringEntity{
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
     private List<ArticleAndTypesEntity> articleAndTypesEntities;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
+    private List<ArticleAndTagsEntity> articleAndTagsEntities;
 }
