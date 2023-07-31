@@ -10,6 +10,7 @@ import com.example.exp.ItemNotFoundException;
 import com.example.repository.ProfileCustomRepository;
 import com.example.repository.ProfileRepository;
 import com.example.util.MD5Util;
+import com.example.util.ProfileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,17 +22,26 @@ import java.util.Optional;
 
 @Service
 public class ProfileService {
-    @Autowired
     private ProfileRepository profileRepository;
-
     @Autowired
+    public void setProfileRepository(ProfileRepository profileRepository) {
+        this.profileRepository = profileRepository;
+    }
+
     private ProfileCustomRepository profileCustomRepository;
-
     @Autowired
+    public void setProfileCustomRepository(ProfileCustomRepository profileCustomRepository) {
+        this.profileCustomRepository = profileCustomRepository;
+    }
+
     private AttachService attachService;
+    @Autowired
+    public void setAttachService(AttachService attachService) {
+        this.attachService = attachService;
+    }
 
     public ProfileDTO create(ProfileDTO dto, Integer ptrId) {
-        check(dto);
+        ProfileUtil.check(dto);
         Optional<ProfileEntity> emailEntity = profileRepository.findByEmail(dto.getEmail());
         if (emailEntity.isPresent()){
             throw new AppBadRequestException("This email already exists");
@@ -75,23 +85,23 @@ public class ProfileService {
             throw new AppBadRequestException("No data found to change");
         }
         if (dto.getName() != null){
-            checkingName(dto.getName());
+            ProfileUtil.checkingName(dto.getName());
             entity.setName(dto.getName());
         }
         if (dto.getSurname() != null){
-            checkingSurname(dto.getSurname());
+            ProfileUtil.checkingSurname(dto.getSurname());
             entity.setSurname(dto.getSurname());
         }
         if (dto.getEmail() != null){
-            checkingEmail(dto.getEmail());
+            ProfileUtil.checkingEmail(dto.getEmail());
             entity.setEmail(dto.getEmail());
         }
         if (dto.getPhone() != null){
-            checkingPhone(dto.getPhone());
+            ProfileUtil.checkingPhone(dto.getPhone());
             entity.setPhone(dto.getPhone());
         }
         if (dto.getPassword() != null){
-            checkingPassword(dto.getPassword());
+            ProfileUtil.checkingPassword(dto.getPassword());
             entity.setPassword(MD5Util.encode(dto.getPassword()));
         }
         if (dto.getImageId() != null){
@@ -134,96 +144,6 @@ public class ProfileService {
         FilterResultDTO result = profileCustomRepository.filter(filterDTO, page-1,  size);
         List<ProfileDTO> dtoList = result.getList();
         return new PageImpl<>(dtoList, PageRequest.of(page,size), result.totalCount);
-    }
-
-
-    private void check(ProfileDTO dto) {
-        checkingName(dto.getName());
-        checkingSurname(dto.getSurname());
-        if (!checkingPhone(dto.getPhone())){
-            throw new AppBadRequestException("Number is invalid");
-        }
-        checkingPassword(dto.getPassword());
-        checkingEmail(dto.getEmail());
-    }
-
-    private void checkingEmail(String email) {
-        if (!email.contains("@") || !email.contains("mail")){
-            throw new AppBadRequestException("Email is invalid");
-        }
-    }
-
-    private void checkingPassword(String password) {
-        if (password.isBlank() && password.length() < 4) {
-            throw new AppBadRequestException("There are not enough characters");
-        }
-        char[] arr = password.toCharArray();
-        int upper = 0;
-        int lower = 0;
-        int number = 0;
-        for (char c : arr) {
-            if (c == 32){
-                throw new AppBadRequestException("There can be no spaces");
-            }else if (c > 64 && c < 91) {
-                upper++;
-            }else if (c > 96 && c < 123) {
-                lower++;
-            }else if (c > 47 && c < 58) {
-                number++;
-            }
-        }
-        if (upper == 0 || lower == 0 || number == 0){
-            throw new AppBadRequestException("Password must contain at least one uppercase letter, one lowercase letter, one number and one symbol");
-        }
-    }
-
-    public void checkingName(String value){
-        if (value.length() < 3 || value.isBlank()){
-            throw new AppBadRequestException("There are not enough characters");
-        }
-        isCapital(value);
-        char[] arr = value.toCharArray();
-        for (char c : arr) {
-            if (c > 32 && c < 58) {
-                throw new AppBadRequestException("There is an excess character");
-            }
-        }
-    }
-
-    public void checkingSurname(String value){
-        if (value.length() < 2 || value.isBlank()){
-            throw new AppBadRequestException("There are not enough characters");
-        }
-        isCapital(value);
-        char[] arr = value.toCharArray();
-        for (char c : arr) {
-            if (c > 32 && c < 58) {
-                throw new AppBadRequestException("There is an excess character");
-            }
-        }
-    }
-
-    public static boolean checkingPhone(String phone){
-        boolean bool = true;
-        char[] arr = phone.toCharArray();
-
-        if (phone.length() != 13 || !phone.startsWith("+998")){
-            bool = false;
-        }
-
-        for (int i = 1; i< arr.length; i++) {
-            if (arr[i] < 48 || arr[i] > 57) {
-                bool = false;
-                break;
-            }
-        }
-        return bool;
-    }
-
-    public void isCapital(String value){
-        if (value.charAt(0) < 64 || value.charAt(0) > 91) {
-            throw new AppBadRequestException("Note the capital letter");
-        }
     }
 
     public ProfileEntity get(Integer id){

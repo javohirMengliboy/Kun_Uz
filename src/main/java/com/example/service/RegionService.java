@@ -3,9 +3,9 @@ import com.example.dto.RegionDTO;
 import com.example.entity.RegionEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
+import com.example.mapper.LanguageI;
 import com.example.mapper.LanguageMapper;
 import com.example.repository.RegionRepository;
-import com.example.util.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,12 +64,32 @@ public class RegionService {
 
 
     public List<LanguageMapper> getByLanguage(String lang) {
-        return ServiceUtil.getByLanguage(regionRepository.getRegionByLanguage(lang));
-    }
+        List<LanguageI> list = regionRepository.getRegionByLanguage(lang);
+        List<LanguageMapper> mapperList = new ArrayList<>();
+        list.forEach(entity -> {
+            LanguageMapper mapper = new LanguageMapper();
+            mapper.setId(entity.getId());
+            mapper.setOrderNumber(entity.getOrderNumber());
+            mapper.setName(entity.getName());
+            mapperList.add(mapper);
+        });
+        return mapperList;    }
 
 
     private RegionEntity checkingForUpdate(RegionDTO dto, RegionEntity entity) {
-        return (RegionEntity) ServiceUtil.checkingForUpdate(dto, entity);
+        if (dto.getOrderNumber() != null){
+            entity.setOrderNumber(dto.getOrderNumber());
+        }
+        if (dto.getNameUz() != null){
+            entity.setNameUz(dto.getNameUz());
+        }
+        if (dto.getNameRu() != null){
+            entity.setNameRu(dto.getNameRu());
+        }
+        if (dto.getNameEng() != null){
+            entity.setNameEng(dto.getNameEng());
+        }
+        return entity;
     }
 
     private RegionDTO toDto(RegionEntity entity) {

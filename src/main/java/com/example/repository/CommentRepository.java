@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface CommentRepository extends CrudRepository<CommentEntity, String> {
     List<CommentEntity> findAllByArticleId(String articleId);
-    List<CommentEntity> findAllByReplayId(String replayId);
+    List<CommentEntity> findAllByReplayId(Integer replayId);
     List<CommentEntity> findAllByVisibleTrue(Pageable pageable);
 }

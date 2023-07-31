@@ -4,9 +4,9 @@ import com.example.dto.ArticleTypeDTO;
 import com.example.entity.ArticleTypeEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
+import com.example.mapper.LanguageI;
 import com.example.mapper.LanguageMapper;
 import com.example.repository.ArticleTypeRepository;
-import com.example.util.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,12 +63,33 @@ public class ArticleTypeService {
     }
 
     public List<LanguageMapper> getByLanguage(String lang) {
-        return ServiceUtil.getByLanguage(articleTypeRepository.getArticleTypeByLanguage(lang));
+        List<LanguageI> list = articleTypeRepository.getArticleTypeByLanguage(lang);
+        List<LanguageMapper> mapperList = new ArrayList<>();
+        list.forEach(entity -> {
+            LanguageMapper mapper = new LanguageMapper();
+            mapper.setId(entity.getId());
+            mapper.setOrderNumber(entity.getOrderNumber());
+            mapper.setName(entity.getName());
+            mapperList.add(mapper);
+        });
+        return mapperList;
     }
 
 
     private ArticleTypeEntity checkingForUpdate(ArticleTypeDTO dto, ArticleTypeEntity entity) {
-        return (ArticleTypeEntity) ServiceUtil.checkingForUpdate(dto, entity);
+        if (dto.getOrderNumber() != null){
+            entity.setOrderNumber(dto.getOrderNumber());
+        }
+        if (dto.getNameUz() != null){
+            entity.setNameUz(dto.getNameUz());
+        }
+        if (dto.getNameRu() != null){
+            entity.setNameRu(dto.getNameRu());
+        }
+        if (dto.getNameEng() != null){
+            entity.setNameEng(dto.getNameEng());
+        }
+        return entity;
     }
 
     private ArticleTypeDTO toDto(ArticleTypeEntity entity) {

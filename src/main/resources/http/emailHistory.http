@@ -1,0 +1,14 @@
+### 2. get by emailId
+GET http://localhost:8080/api/v1/emailHistory/get/by_email?email=
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5MzkwMjcsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwMDI1NDI3LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.AGtwqLmZv-mRJGQpN8oCQ1tNlvAYIgcCZC6MozSNE4GUOHfPKqscASkyghO2OSRybCrRHZUmID2swSfGQe2B1g
+
+### 3. get by created date
+GET http://localhost:8080/api/v1/emailHistory/get/by_createdDate?createdDate=
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5MzkwMjcsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwMDI1NDI3LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.AGtwqLmZv-mRJGQpN8oCQ1tNlvAYIgcCZC6MozSNE4GUOHfPKqscASkyghO2OSRybCrRHZUmID2swSfGQe2B1g
+
+### 3. get pagination
+GET http://localhost:8080/api/v1/emailHistory/get/pagination?page=1&size=3
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5MzkwMjcsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwMDI1NDI3LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.AGtwqLmZv-mRJGQpN8oCQ1tNlvAYIgcCZC6MozSNE4GUOHfPKqscASkyghO2OSRybCrRHZUmID2swSfGQe2B1g
+
+
+

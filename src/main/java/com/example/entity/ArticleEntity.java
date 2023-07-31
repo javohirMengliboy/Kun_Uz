@@ -7,12 +7,14 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "article")
 public class ArticleEntity extends BaseStringEntity{
+    Random random = new Random();
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -23,7 +25,7 @@ public class ArticleEntity extends BaseStringEntity{
     private String content;
 
     @Column(name = "shared_count")
-    private Integer sharedCount = 65;
+    private Integer sharedCount = random.nextInt(100,200);
 
     @Column(name = "attach_id")
     private String attachId;
@@ -59,10 +61,13 @@ public class ArticleEntity extends BaseStringEntity{
     private ArticleStatus status = ArticleStatus.PUBLISHED;
 
     @Column(name = "published_date")
-    private LocalDateTime publishedDate = LocalDateTime.now().plusDays(2);
+    private LocalDateTime publishedDate = getCreatedDate().plusHours(random.nextLong(10,42));
 
     @Column(name = "view_count")
-    private Integer viewCount = 150;
+    private Integer viewCount = random.nextInt(500,1000);
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
+    private List<CommentEntity> commentEntities;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
     private List<ArticleAndTypesEntity> articleAndTypesEntities;

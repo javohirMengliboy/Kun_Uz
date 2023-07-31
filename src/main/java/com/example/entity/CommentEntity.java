@@ -10,13 +10,12 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "comment")
-public class
-CommentEntity extends BaseIdentityEntity {
+public class CommentEntity extends BaseIdentityEntity {
     @Column(name = "content")
     private String content;
 
     @Column(name = "replay_id")
-    private String replayId;
+    private Integer replayId;
     @ManyToOne
     @JoinColumn(name = "replay_id", insertable = false, updatable = false)
     private CommentEntity replayComment;

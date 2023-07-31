@@ -69,7 +69,7 @@ public class CommentController {
         return ResponseEntity.ok().body(commentService.filter(filterDTO, page, size));
     }
     @GetMapping(value = "/by_replay")
-    public ResponseEntity<List<CommentDTO>> getByReplay(@RequestParam("replayId") String replayId,
+    public ResponseEntity<List<CommentDTO>> getByReplay(@RequestParam("replayId") Integer replayId,
                                                          HttpServletRequest request){
         SecurityUtil.hasRole(request, null);
         return ResponseEntity.ok().body(commentService.getByReplay(replayId));

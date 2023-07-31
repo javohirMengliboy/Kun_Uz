@@ -4,9 +4,9 @@ import com.example.dto.CategoryDTO;
 import com.example.entity.CategoryEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
+import com.example.mapper.LanguageI;
 import com.example.mapper.LanguageMapper;
 import com.example.repository.CategoryRepository;
-import com.example.util.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,14 +63,34 @@ public class CategoryService {
     }
 
     public List<LanguageMapper> getByLanguage(String lang) {
-        return ServiceUtil.getByLanguage(categoryRepository.getCategoryByLanguage(lang));
-    }
+        List<LanguageI> list = categoryRepository.getCategoryByLanguage(lang);
+        List<LanguageMapper> mapperList = new ArrayList<>();
+        list.forEach(entity -> {
+            LanguageMapper mapper = new LanguageMapper();
+            mapper.setId(entity.getId());
+            mapper.setOrderNumber(entity.getOrderNumber());
+            mapper.setName(entity.getName());
+            mapperList.add(mapper);
+        });
+        return mapperList;    }
 
 
 
 
     private CategoryEntity checkingForUpdate(CategoryDTO dto, CategoryEntity entity) {
-        return (CategoryEntity) ServiceUtil.checkingForUpdate(dto, entity);
+        if (dto.getOrderNumber() != null){
+            entity.setOrderNumber(dto.getOrderNumber());
+        }
+        if (dto.getNameUz() != null){
+            entity.setNameUz(dto.getNameUz());
+        }
+        if (dto.getNameRu() != null){
+            entity.setNameRu(dto.getNameRu());
+        }
+        if (dto.getNameEng() != null){
+            entity.setNameEng(dto.getNameEng());
+        }
+        return entity;
     }
 
     private CategoryDTO toDto(CategoryEntity entity) {

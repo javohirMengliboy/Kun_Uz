@@ -99,7 +99,7 @@ public class CommentService {
                 entity.getUpdateDate(), entity.getVisible());
     }
 
-    public List<CommentDTO> getByReplay(String replayId) {
+    public List<CommentDTO> getByReplay(Integer replayId) {
         List<CommentDTO> dtoList = new ArrayList<>();
         List<CommentEntity> entityList = commentRepository.findAllByReplayId(replayId);
         if (entityList.isEmpty()){

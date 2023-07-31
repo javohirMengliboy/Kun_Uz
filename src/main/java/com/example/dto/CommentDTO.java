@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class CommentDTO {
     private Integer id;
     private String content;
-    private String replayId;
+    private Integer replayId;
     private Integer profileId;
     private String articleId;
     private LocalDateTime createdDate;
@@ -23,7 +23,7 @@ public class CommentDTO {
     public CommentDTO() {
     }
 
-    public CommentDTO(Integer id, String content, String replayId, Integer profileId, String articleId, LocalDateTime createdDate, LocalDateTime updateDate, Boolean visible) {
+    public CommentDTO(Integer id, String content, Integer replayId, Integer profileId, String articleId, LocalDateTime createdDate, LocalDateTime updateDate, Boolean visible) {
         this.id = id;
         this.content = content;
         this.replayId = replayId;

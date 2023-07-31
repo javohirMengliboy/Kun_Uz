@@ -1,14 +1,15 @@
 package com.example.service;
 
-import com.example.dto.ApiResponseDTO;
-import com.example.dto.AuthDTO;
-import com.example.dto.ProfileDTO;
+import com.example.dto.*;
 import com.example.entity.ProfileEntity;
+import com.example.enums.ProfileRole;
 import com.example.enums.ProfileStatus;
+import com.example.exp.AppBadRequestException;
 import com.example.repository.ProfileRepository;
 import com.example.util.JWTUtil;
 import com.example.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +19,12 @@ public class AuthService {
 
     @Autowired
     private ProfileRepository profileRepository;
+    @Autowired
+    private MailSenderService mailSenderService;
+
+
+    @Value("${server.url}")
+    private String serverUrl;
 
     public ApiResponseDTO login(AuthDTO dto) {
         // check
@@ -41,5 +48,40 @@ public class AuthService {
         response.setPhone(profileEntity.getPhone());
         response.setJwt(JWTUtil.encode(profileEntity.getId(),profileEntity.getRole()));
         return new ApiResponseDTO(true, response);
+    }
+
+    public ApiResponseDTO registration(RegistrationDTO dto) {
+        // check
+        Optional<ProfileEntity> exists = profileRepository.findByEmail(dto.getEmail());
+        if (exists.isPresent()) {
+            return new ApiResponseDTO(false, "Email already exists.");
+        }
+        ProfileEntity entity = new ProfileEntity();
+        entity.setName(dto.getName());
+        entity.setSurname(dto.getSurname());
+        entity.setEmail(dto.getEmail());
+        entity.setPassword(MD5Util.encode(dto.getPassword()));
+        entity.setRole(ProfileRole.USER);
+        entity.setStatus(ProfileStatus.REGISTRATION);
+        profileRepository.save(entity);
+        mailSenderService.sendEmailVerification(dto.getEmail(),entity.getName(), entity.getId());// send registration verification link
+        return new ApiResponseDTO(true, "The verification link was send to email.");
+    }
+
+    public ApiResponseDTO emailVerification(String jwt) {
+        JwtDTO jwtDTO = JWTUtil.decodeEmailJwt(jwt);
+
+        Optional<ProfileEntity> exists = profileRepository.findById(jwtDTO.getId());
+        if (exists.isEmpty()) {
+            throw new AppBadRequestException("Profile not found");
+        }
+
+        ProfileEntity entity = exists.get();
+        if (!entity.getStatus().equals(ProfileStatus.REGISTRATION)) {
+            throw new AppBadRequestException("Wrong status");
+        }
+        entity.setStatus(ProfileStatus.ACTIVE);
+        profileRepository.save(entity); // update
+        return new ApiResponseDTO(true, "Registration completed");
     }
 }

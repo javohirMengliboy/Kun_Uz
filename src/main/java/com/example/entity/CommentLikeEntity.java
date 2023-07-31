@@ -19,7 +19,7 @@ public final class CommentLikeEntity extends BaseIdentityEntity{
     @Column(name = "comment_id")
     private Integer commentId;
     @ManyToOne
-    @JoinColumn(name = "article_id", insertable = false, updatable = false)
+    @JoinColumn(name = "comment_id", insertable = false, updatable = false)
     private CommentEntity comment;
 
     @Enumerated(EnumType.STRING)
