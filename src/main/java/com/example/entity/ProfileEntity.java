@@ -35,7 +35,6 @@ public class ProfileEntity extends BaseIdentityEntity {
     @Enumerated(EnumType.STRING)
     private ProfileRole role;
 
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "image_id")
     private AttachEntity image;

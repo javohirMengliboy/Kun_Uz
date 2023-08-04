@@ -22,7 +22,7 @@ public class EmailHistoryController {
     @Autowired
     private EmailHistoryService emailHistoryService;
     @GetMapping(value = "/get/by_email")
-    public ResponseEntity<EmailHistoryDTO> getByEmail(@RequestParam("email") String email,
+    public ResponseEntity<List<EmailHistoryDTO>> getByEmail(@RequestParam("email") String email,
                                                       HttpServletRequest request){
         SecurityUtil.hasRole(request, ProfileRole.ADMIN);
         return ResponseEntity.ok(emailHistoryService.getByEmail(email));

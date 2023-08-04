@@ -10,6 +10,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Service
 public class MailSenderService {
     private JavaMailSender javaMailSender;
@@ -30,18 +33,38 @@ public class MailSenderService {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
-    void sendMimeEmail(String toAccount, String text) {
-        try {
-            MimeMessage msg = javaMailSender.createMimeMessage();
-            msg.setFrom(fromEmail);
-            MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-            helper.setTo(toAccount);
-            helper.setSubject("Kun uz registration compilation");
-            helper.setText(text, true);
-            javaMailSender.send(msg);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+//    void sendMimeEmail(String toAccount, String text) {
+//        try {
+//            MimeMessage msg = javaMailSender.createMimeMessage();
+//            msg.setFrom(fromEmail);
+//            MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+//            helper.setTo(toAccount);
+//            helper.setSubject("Kun uz registration compilation");
+//            helper.setText(text, true);
+//            javaMailSender.send(msg);
+//        } catch (MessagingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+    public void sendMimeEmail(String toAccount, String text){
+        ExecutorService emailExecutor = Executors.newSingleThreadExecutor();
+        emailExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MimeMessage msg=javaMailSender.createMimeMessage();
+                    MimeMessageHelper helper=new MimeMessageHelper(msg,true);
+                    helper.setTo(toAccount);
+                    helper.setSubject("Kun uz registration compilation");
+                    helper.setText("nimadur",text);
+                    javaMailSender.send(msg);
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        emailExecutor.shutdown();
     }
 
     public void sendEmailVerification(String toAccount,String name, Integer id) {

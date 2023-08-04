@@ -23,8 +23,12 @@ public class EmailHistoryService {
         emailHistoryRepository.save(entity);
     }
 
-    public EmailHistoryDTO getByEmail(String email) {
-        return emailHistoryRepository.findByEmail(email).map(this::toDTO).orElseThrow(()-> new ItemNotFoundException("EmailHistory not found"));
+    public List<EmailHistoryDTO> getByEmail(String email) {
+        List<EmailHistoryEntity> entityList = emailHistoryRepository.findByEmail(email);
+        if (entityList.isEmpty()){
+            throw new ItemNotFoundException("Email History not found");
+        }
+        return entityList.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     public List<EmailHistoryDTO> getByCreatedDate(LocalDate date) {

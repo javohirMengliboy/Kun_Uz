@@ -22,6 +22,9 @@ public class AuthService {
     @Autowired
     private MailSenderService mailSenderService;
 
+    @Autowired
+    private SmsSenderService smsSenderService;
+
 
     @Value("${server.url}")
     private String serverUrl;
@@ -60,11 +63,13 @@ public class AuthService {
         entity.setName(dto.getName());
         entity.setSurname(dto.getSurname());
         entity.setEmail(dto.getEmail());
+        entity.setPhone(dto.getPhone());
         entity.setPassword(MD5Util.encode(dto.getPassword()));
         entity.setRole(ProfileRole.USER);
         entity.setStatus(ProfileStatus.REGISTRATION);
         profileRepository.save(entity);
-        mailSenderService.sendEmailVerification(dto.getEmail(),entity.getName(), entity.getId());// send registration verification link
+        smsSenderService.send(dto.getPhone());
+//        mailSenderService.sendEmailVerification(dto.getEmail(),entity.getName(), entity.getId());// send registration verification link
         return new ApiResponseDTO(true, "The verification link was send to email.");
     }
 

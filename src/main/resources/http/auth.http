@@ -32,6 +32,7 @@ Content-Type:  application/json
 {
   "name": "Javohir",
   "surname": "Mengliboyev",
+  "phone": "+998996742127",
   "email": "javohscript@gmail.com",
   "password": "kunkun"
 }
