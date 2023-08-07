@@ -19,9 +19,6 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-
-
-
     @PostMapping(value = {"/login"})
     public ResponseEntity<ApiResponseDTO> login(@RequestBody AuthDTO dto) {
         return ResponseEntity.ok(authService.login(dto));

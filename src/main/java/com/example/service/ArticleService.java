@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.config.CustomUserDetails;
 import com.example.dto.*;
 import com.example.entity.*;
 import com.example.exp.AppBadRequestException;
@@ -7,6 +8,7 @@ import com.example.exp.ItemNotFoundException;
 import com.example.mapper.ArticleGetMapper;
 import com.example.mapper.ArticleMapper;
 import com.example.repository.*;
+import com.example.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -71,11 +73,13 @@ public class ArticleService {
 
 
     /** 1 */
-    public ArticleDTO create(ArticleDTO dto,Integer moderatorId) {
-        AttachEntity attach = attachService.get(dto.getAttachId());
-        if (attach == null){
-            throw new ItemNotFoundException("Attach not found");
-        }
+    public ArticleDTO create(ArticleDTO dto) {
+        CustomUserDetails userDetails = SpringSecurityUtil.getCurrentUser();
+        ProfileEntity profile = userDetails.getProfile();
+//        AttachEntity attach = attachService.get(dto.getAttachId());
+//        if (attach == null){
+//            throw new ItemNotFoundException("Attach not found");
+//        }
 
         CategoryEntity category = categoryService.get(dto.getCategoryId());
         if (category == null){
@@ -87,16 +91,16 @@ public class ArticleService {
             throw new ItemNotFoundException("Region not found");
         }
 
-        ProfileEntity moderator = profileService.get(moderatorId);
+        ProfileEntity moderator = profileService.get(profile.getId());
         if (moderator == null){
             throw new ItemNotFoundException("Moderator not found");
         }
         ArticleEntity entity = new ArticleEntity();
-        entity.setId(UUID.randomUUID().toString());
+//        entity.setId(UUID.randomUUID().toString());
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setContent(dto.getContent());
-        entity.setAttachId(dto.getAttachId());
+//        entity.setAttachId(dto.getAttachId());
         entity.setRegionId(region.getId());
         entity.setCategoryId(category.getId());
         entity.setModeratorId(moderator.getId());
@@ -104,8 +108,10 @@ public class ArticleService {
         for (Integer typeId : dto.getArticleTypes()){
             articleAndTypesService.create(entity.getId(), typeId);
         }
-        for (Integer tagId : dto.getArticleTypes()){
-            articleAndTagsService.create(entity.getId(), tagId);
+        if (dto.getArticleTags() != null){
+            for (Integer tagId : dto.getArticleTags()){
+                articleAndTagsService.create(entity.getId(), tagId);
+            }
         }
         dto.setId(entity.getId());
         dto.setSharedCount(entity.getSharedCount());

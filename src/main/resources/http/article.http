@@ -1,16 +1,16 @@
 ### 1. Create
-POST localhost:8080/api/v1/article/admin
+POST localhost:8080/api/v1/article
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDQ2NDI2LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.CBKbPczBG-79JHrYy95CTdKd-cLEO56wJNBNXJsMy-hPnPf6_3ueXHbkpff5-n0uxFCbb_21gcMUP6ODvxaCMw
+Authorization: Basic Kzk5ODk5OTk5ODg3NzpBbGkx
+#Authorization: Basic Kzk5ODk5Njc0MjEyNzpKYXZvaDE=
 
 {
-  "title": "article 13",
-  "description": "des 13",
-  "content": "content 13",
-  "attachId": "46ba7317-5553-4303-b0eb-1dc9aea90e59",
-  "regionId": 1,
-  "categoryId": 2,
-  "articleTypes": [3,1]
+  "title": "article 3",
+  "description": "des 3",
+  "content": "content 3",
+  "regionId": 2,
+  "categoryId": 3,
+  "articleTypes": [1]
 }
 
 ### 2. Update

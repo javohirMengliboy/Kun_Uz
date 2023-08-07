@@ -20,7 +20,7 @@ public class AttachController {
     @Autowired
     private AttachService attachService;
 
-    @PostMapping("/upload")
+    @PostMapping("/open/upload")
     public ResponseEntity<AttachDTO> upload(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok().body(attachService.save(file));
     }
@@ -45,18 +45,18 @@ public class AttachController {
     public ResponseEntity<List<AttachDTO>> pagination(@RequestParam("page") int page,
                                            @RequestParam("size") int size,
                                            HttpServletRequest request) {
-        SecurityUtil.hasRole(request, ProfileRole.MODERATOR);
+        SecurityUtil.hasRole(request, ProfileRole.ROLE_MODERATOR);
         return ResponseEntity.ok().body(attachService.pagination(page,size));
     }
     @DeleteMapping(value = "/admin/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") String id,
                                           HttpServletRequest request) {
         System.out.println(request.getAttribute("role"));
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+        SecurityUtil.hasRole(request, ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok().body(attachService.delete(id));
     }
 
-    @GetMapping("/download/{id}")
+    @GetMapping("/open/download/{id}")
     public ResponseEntity<Resource> download(@PathVariable("id") String id) {
         return attachService.download(id);
     }

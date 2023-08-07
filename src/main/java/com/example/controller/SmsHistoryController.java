@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.dto.EmailHistoryDTO;
 import com.example.dto.SmsHistoryDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.SmsHistoryService;
@@ -23,24 +22,18 @@ public class SmsHistoryController {
     @Autowired
     private SmsHistoryService smsHistoryService;
     @GetMapping(value = "/get/by_phone")
-    public ResponseEntity<SmsHistoryDTO> getByPhone(@RequestParam("phone") String phone,
-                                                    HttpServletRequest request){
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+    public ResponseEntity<SmsHistoryDTO> getByPhone(@RequestParam("phone") String phone){
         return ResponseEntity.ok(smsHistoryService.getByPhone(phone));
     }
 
     @GetMapping(value = "/get/by_createdDate")
-    public ResponseEntity<List<SmsHistoryDTO>> getByCreatedDate(@RequestParam("createdDate") LocalDate date,
-                                                                  HttpServletRequest request){
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+    public ResponseEntity<List<SmsHistoryDTO>> getByCreatedDate(@RequestParam("createdDate") LocalDate date){
         return ResponseEntity.ok(smsHistoryService.getByCreatedDate(date));
     }
 
     @GetMapping(value = "/get/pagination")
     public ResponseEntity<PageImpl<SmsHistoryDTO>> getPagination(@RequestParam("page") int page,
-                                                                   @RequestParam("size") int size,
-                                                                   HttpServletRequest request){
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+                                                                   @RequestParam("size") int size){
         return ResponseEntity.ok(smsHistoryService.getPagination(page, size));
     }
 

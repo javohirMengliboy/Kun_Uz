@@ -4,6 +4,7 @@ import com.example.dto.CommentLikeDTO;
 import com.example.entity.CommentLikeEntity;
 import com.example.enums.LikeStatus;
 import com.example.repository.CommentLikeRepository;
+import com.example.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,8 @@ public class CommentLikeService {
     @Autowired
     private CommentLikeRepository commentLikeRepository;
 
-    public CommentLikeDTO like(Integer profileId, CommentLikeDTO dto) {
+    public CommentLikeDTO like(CommentLikeDTO dto) {
+        Integer profileId = SpringSecurityUtil.getCurrentUserId();
         CommentLikeEntity entity = hasLiked(dto.getCommentId(),profileId);
         if (entity != null){
             if (entity.getStatus() == null){
@@ -35,7 +37,8 @@ public class CommentLikeService {
 
     }
 
-    public CommentLikeDTO dislike(Integer profileId, CommentLikeDTO dto) {
+    public CommentLikeDTO dislike(CommentLikeDTO dto) {
+        Integer profileId = SpringSecurityUtil.getCurrentUserId();
         CommentLikeEntity entity = hasLiked(dto.getCommentId(),profileId);
         if (entity != null){
             if (entity.getStatus() == null){

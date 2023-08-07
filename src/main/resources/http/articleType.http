@@ -1,13 +1,13 @@
 ### 1. Create
 POST localhost:8080/api/v1/articleType
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNTExOTYsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2OTA0Mzc1OTYsImlzcyI6Imt1bnV6IHRlc3QgcG9ydGFsaSJ9.fEA269xmvmL-c4A9mSm4KbJAd_B28eh6PyxPsWIfatkONCD3IuiBYQfiQb9CQ8aUSoPzsLdECrhbMf0EFqzftA
+Authorization: Basic Kzk5ODk5Njc0MjEyNzpKYXZvaDE=
 
 {
-  "orderNumber": 10,
-  "nameUz": "Video Yangilik",
-  "nameRu": "Видео Новости",
-  "nameEng": "Video News"
+  "orderNumber": 3,
+  "nameUz": "Dolzarb",
+  "nameRu": "Действительный",
+  "nameEng": "Actual"
 }
 
 ### 2. Update

@@ -19,17 +19,13 @@ public class ArticleLikeController {
     private ArticleLikeService articleLikeService;
 
     @PostMapping(value = "/like")
-    public ResponseEntity<ArticleLikeDTO> like(@RequestBody ArticleLikeDTO dto,
-                                               HttpServletRequest request){
-        JwtDTO jwtDTO = SecurityUtil.hasRole(request, null);
-        return ResponseEntity.ok().body(articleLikeService.like(jwtDTO.getId(), dto));
+    public ResponseEntity<ArticleLikeDTO> like(@RequestBody ArticleLikeDTO dto){
+        return ResponseEntity.ok().body(articleLikeService.like(dto));
     }
 
     @PostMapping(value = "/dislike")
-    public ResponseEntity<ArticleLikeDTO> dislike(@RequestBody ArticleLikeDTO dto,
-                                                  HttpServletRequest request){
-        JwtDTO jwtDTO = SecurityUtil.hasRole(request, null);
-        return ResponseEntity.ok().body(articleLikeService.dislike(jwtDTO.getId(), dto));
+    public ResponseEntity<ArticleLikeDTO> dislike(@RequestBody ArticleLikeDTO dto){
+        return ResponseEntity.ok().body(articleLikeService.dislike(dto));
     }
 
 }

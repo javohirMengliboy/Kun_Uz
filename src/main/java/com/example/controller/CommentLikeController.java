@@ -16,16 +16,12 @@ public class CommentLikeController {
     private CommentLikeService commentLikeService;
 
     @PostMapping(value = "/like")
-    public ResponseEntity<CommentLikeDTO> like(@RequestBody CommentLikeDTO dto,
-                                               HttpServletRequest request){
-        JwtDTO jwtDTO = SecurityUtil.hasRole(request, null);
-        return ResponseEntity.ok().body(commentLikeService.like(jwtDTO.getId(), dto));
+    public ResponseEntity<CommentLikeDTO> like(@RequestBody CommentLikeDTO dto){
+        return ResponseEntity.ok().body(commentLikeService.like(dto));
     }
 
     @PostMapping(value = "/dislike")
-    public ResponseEntity<CommentLikeDTO> dislike(@RequestBody CommentLikeDTO dto,
-                                               HttpServletRequest request){
-        JwtDTO jwtDTO = SecurityUtil.hasRole(request, null);
-        return ResponseEntity.ok().body(commentLikeService.dislike(jwtDTO.getId(), dto));
+    public ResponseEntity<CommentLikeDTO> dislike(@RequestBody CommentLikeDTO dto){
+        return ResponseEntity.ok().body(commentLikeService.dislike(dto));
     }
 }

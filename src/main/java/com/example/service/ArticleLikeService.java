@@ -1,9 +1,12 @@
 package com.example.service;
 
+import com.example.config.CustomUserDetails;
 import com.example.dto.ArticleLikeDTO;
 import com.example.entity.ArticleLikeEntity;
+import com.example.entity.ProfileEntity;
 import com.example.enums.LikeStatus;
 import com.example.repository.ArticleLikeRepository;
+import com.example.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +15,10 @@ public class ArticleLikeService {
     @Autowired
     private ArticleLikeRepository articleLikeRepository;
 
-    public ArticleLikeDTO like(Integer profileId, ArticleLikeDTO dto) {
-        ArticleLikeEntity entity = hasLiked(dto.getArticleId(),profileId);
+    public ArticleLikeDTO like( ArticleLikeDTO dto) {
+        CustomUserDetails userDetails = SpringSecurityUtil.getCurrentUser();
+        ProfileEntity profile = userDetails.getProfile();
+        ArticleLikeEntity entity = hasLiked(dto.getArticleId(), profile.getId());
         if (entity != null){
             if (entity.getStatus() == null){
                 entity.setStatus(LikeStatus.LIKE);
@@ -23,7 +28,7 @@ public class ArticleLikeService {
         }else {
             entity = new ArticleLikeEntity();
             entity.setArticleId(dto.getArticleId());
-            entity.setProfileId(profileId);
+            entity.setProfileId(profile.getId());
             entity.setStatus(LikeStatus.LIKE);
         }
         articleLikeRepository.save(entity);
@@ -35,8 +40,10 @@ public class ArticleLikeService {
 
     }
 
-    public ArticleLikeDTO dislike(Integer profileId, ArticleLikeDTO dto) {
-        ArticleLikeEntity entity = hasLiked(dto.getArticleId(),profileId);
+    public ArticleLikeDTO dislike(ArticleLikeDTO dto) {
+        CustomUserDetails userDetails = SpringSecurityUtil.getCurrentUser();
+        ProfileEntity profile = userDetails.getProfile();
+        ArticleLikeEntity entity = hasLiked(dto.getArticleId(), profile.getId());
         if (entity != null){
             if (entity.getStatus() == null){
                 entity.setStatus(LikeStatus.DISLIKE);
@@ -46,7 +53,7 @@ public class ArticleLikeService {
         }else {
             entity = new ArticleLikeEntity();
             entity.setArticleId(dto.getArticleId());
-            entity.setProfileId(profileId);
+            entity.setProfileId(profile.getId());
             entity.setStatus(LikeStatus.DISLIKE);
         }
         articleLikeRepository.save(entity);

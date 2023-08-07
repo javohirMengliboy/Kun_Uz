@@ -10,67 +10,55 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/profile")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
     @PostMapping(value = "")
-    public ResponseEntity<ProfileDTO> create(@RequestBody ProfileDTO dto,
-                                             HttpServletRequest request) {
-        JwtDTO jwtDTO = SecurityUtil.hasRole(request, ProfileRole.ADMIN);
-        return ResponseEntity.ok(profileService.create(dto, jwtDTO.getId()));
+    public ResponseEntity<ProfileDTO> create(@RequestBody ProfileDTO dto) {
+        return ResponseEntity.ok(profileService.create(dto));
     }
 
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> update(@RequestBody ProfileDTO dto,
-                                          @PathVariable("id") Integer id,
-                                          HttpServletRequest request) {
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+                                          @PathVariable("id") Integer id) {
         return ResponseEntity.ok(profileService.update(dto, id));
     }
 
     @PutMapping(value = "/detail")
-    public ResponseEntity<Boolean> updateDetail(@RequestBody ProfileDTO dto,
-                                                HttpServletRequest request) {
-        JwtDTO jwtDTO = SecurityUtil.hasRole(request, null);
-        return ResponseEntity.ok(profileService.updateDetail(jwtDTO.getId(), dto));
+    public ResponseEntity<Boolean> updateDetail(@RequestBody ProfileDTO dto) {
+        return ResponseEntity.ok(profileService.updateDetail(dto));
     }
 
 
 
     @GetMapping(value = "")
-    public ResponseEntity<List<ProfileDTO>> getAll(HttpServletRequest request) {
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+    public ResponseEntity<List<ProfileDTO>> getAll() {
         return ResponseEntity.ok(profileService.getAll());
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id,
-                                              HttpServletRequest request) {
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+    public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(profileService.deleteProfileById(id));
     }
 
     @PutMapping(value = "/update_img")
-    public ResponseEntity<String> updateImage(@RequestBody ProfileDTO dto,
-                                              HttpServletRequest request) {
-        System.out.println(dto.getImageId()+" "+ request.getAttribute("role"));
-        JwtDTO jwtDTO = SecurityUtil.hasRole(request, null);
-        return ResponseEntity.ok(profileService.updateImage(jwtDTO.getId(), dto));
+    public ResponseEntity<String> updateImage(@RequestBody ProfileDTO dto) {
+        return ResponseEntity.ok(profileService.updateImage(dto));
     }
 
     @PostMapping(value = "/filter")
     public ResponseEntity<PageImpl<ProfileDTO>> filter(@RequestBody ProfileFilterDTO filterDTO,
                                                        @RequestParam("page") Integer page,
-                                                       @RequestParam("size") Integer size,
-                                                       HttpServletRequest request) {
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+                                                       @RequestParam("size") Integer size) {
         return ResponseEntity.ok(profileService.filter(filterDTO, page-1,size));
     }
 

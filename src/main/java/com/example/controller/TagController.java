@@ -2,7 +2,6 @@ package com.example.controller;
 
 import com.example.dto.TagDTO;
 import com.example.enums.ProfileRole;
-import com.example.mapper.LanguageMapper;
 import com.example.service.TagService;
 import com.example.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,30 +17,22 @@ public class TagController {
     private TagService tagService;
 
     @PostMapping(value = "")
-    public ResponseEntity<TagDTO> create(@RequestBody TagDTO dto,
-                                         @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+    public ResponseEntity<TagDTO> create(@RequestBody TagDTO dto) {
         return ResponseEntity.ok(tagService.create(dto));
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> updateOrderById(@RequestBody TagDTO dto,
-                                                   @PathVariable("id") Integer id,
-                                                   @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+                                                   @PathVariable("id") Integer id) {
         return ResponseEntity.ok(tagService.update(dto, id));
     }
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id,
-                                              @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+    public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(tagService.deleteTagById(id));
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<List<TagDTO>> getAll(
-            @RequestHeader("Authorization") String authToken) {
-        SecurityUtil.hasRole(authToken, ProfileRole.ADMIN);
+    public ResponseEntity<List<TagDTO>> getAll() {
         return ResponseEntity.ok(tagService.getAll());
     }
 }

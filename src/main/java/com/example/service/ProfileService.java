@@ -11,6 +11,7 @@ import com.example.repository.ProfileCustomRepository;
 import com.example.repository.ProfileRepository;
 import com.example.util.MD5Util;
 import com.example.util.ProfileUtil;
+import com.example.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,7 @@ public class ProfileService {
         this.attachService = attachService;
     }
 
-    public ProfileDTO create(ProfileDTO dto, Integer ptrId) {
+    public ProfileDTO create(ProfileDTO dto) {
         ProfileUtil.check(dto);
         Optional<ProfileEntity> emailEntity = profileRepository.findByEmail(dto.getEmail());
         if (emailEntity.isPresent()){
@@ -59,7 +60,7 @@ public class ProfileService {
         entity.setPassword(MD5Util.encode(dto.getPassword()));
         entity.setStatus(dto.getStatus());
         entity.setRole(dto.getRole());
-        entity.setPrtId(ptrId);
+        entity.setPrtId(SpringSecurityUtil.getCurrentUserId());
         if (dto.getImageId() != null){
             entity.setImage(attachService.get(dto.getImageId()));
         }
@@ -75,8 +76,8 @@ public class ProfileService {
         return true;
     }
 
-    public Boolean updateDetail(Integer id, ProfileDTO dto) {
-        profileRepository.save(checkingForUpdate(dto,get(id)));
+    public Boolean updateDetail(ProfileDTO dto) {
+        profileRepository.save(checkingForUpdate(dto,get(SpringSecurityUtil.getCurrentUserId())));
         return true;
     }
 
@@ -151,8 +152,8 @@ public class ProfileService {
     }
 
 
-    public String updateImage(Integer id, ProfileDTO dto) {
-        ProfileEntity entity = get(id);
+    public String updateImage(ProfileDTO dto) {
+        ProfileEntity entity = get(SpringSecurityUtil.getCurrentUserId());
         entity.setImage(attachService.get(dto.getImageId()));
         profileRepository.save(entity);
         return "Image setted";

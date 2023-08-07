@@ -3,45 +3,44 @@ package com.example.controller;
 import com.example.dto.*;
 import com.example.enums.ProfileRole;
 import com.example.mapper.ArticleGetMapper;
-import com.example.mapper.ArticleMapper;
 import com.example.service.ArticleService;
 import com.example.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/article")
+@EnableMethodSecurity(prePostEnabled = true)
 public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
     //  1. CREATE (Moderator) status(NotPublished)
-    @PostMapping(value = "/role")
-    public ResponseEntity<?> create(@RequestBody ArticleDTO dto,
-                                    HttpServletRequest request){
-        JwtDTO jwtDTO = SecurityUtil.hasRole(request, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(articleService.create(dto, jwtDTO.getId()));
+    @PreAuthorize("hasAnyRole('MODERATOR')")
+    @PostMapping(value = "")
+    public ResponseEntity<?> create(@RequestBody ArticleDTO dto){
+        return ResponseEntity.ok(articleService.create(dto));
     }
 
     //  2. Update (Moderator (status to not publish)) (remove old image)
+    @PreAuthorize("hasAnyRole('MODERATOR', 'PUBLISHER')")
     @PutMapping(value = "/role/{id}")
     public ResponseEntity<Boolean> update(@RequestBody ArticleDTO dto,
-                                                  @PathVariable("id") String id,
-                                          HttpServletRequest request) {
-        SecurityUtil.hasRole(request, ProfileRole.MODERATOR);
+                                          @PathVariable("id") String id) {
         return ResponseEntity.ok(articleService.update(dto, id));
     }
 
     //  3. Delete Article (MODERATOR)
+    @PreAuthorize("hasAnyRole('MODERATOR')")
     @DeleteMapping(value = "/role/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable("id") String id,
-                                              HttpServletRequest request) {
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+    public ResponseEntity<Boolean> deleteById(@PathVariable("id") String id) {
         return ResponseEntity.ok(articleService.deleteProfileById(id));
     }
 
@@ -125,12 +124,10 @@ public class ArticleController {
     }
 
     //  18. Filter Article
-    @PostMapping(value = "/filter")
+    @PostMapping(value = "/get/filter")
     public ResponseEntity<PageImpl<ArticleFilterDTO>> filter(@RequestParam(value = "page",defaultValue = "1") int page,
                                                              @RequestParam(value = "size",defaultValue = "10") int size,
-                                                             @RequestBody ArticleFilterDTO filterDTO,
-                                                             HttpServletRequest request){
-        SecurityUtil.hasRole(request, null);
+                                                             @RequestBody ArticleFilterDTO filterDTO){
         return ResponseEntity.ok().body(articleService.filter(filterDTO, page, size));
     }
 

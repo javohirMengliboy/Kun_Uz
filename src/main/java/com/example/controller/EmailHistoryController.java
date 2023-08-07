@@ -22,24 +22,18 @@ public class EmailHistoryController {
     @Autowired
     private EmailHistoryService emailHistoryService;
     @GetMapping(value = "/get/by_email")
-    public ResponseEntity<List<EmailHistoryDTO>> getByEmail(@RequestParam("email") String email,
-                                                      HttpServletRequest request){
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+    public ResponseEntity<List<EmailHistoryDTO>> getByEmail(@RequestParam("email") String email){
         return ResponseEntity.ok(emailHistoryService.getByEmail(email));
     }
 
     @GetMapping(value = "/get/by_createdDate")
-    public ResponseEntity<List<EmailHistoryDTO>> getByCreatedDate(@RequestParam("createdDate") LocalDate date,
-                                                                  HttpServletRequest request){
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+    public ResponseEntity<List<EmailHistoryDTO>> getByCreatedDate(@RequestParam("createdDate") LocalDate date){
         return ResponseEntity.ok(emailHistoryService.getByCreatedDate(date));
     }
 
     @GetMapping(value = "/get/pagination")
     public ResponseEntity<PageImpl<EmailHistoryDTO>> getPagination(@RequestParam("page") int page,
-                                                                   @RequestParam("size") int size,
-                                                                   HttpServletRequest request){
-        SecurityUtil.hasRole(request, ProfileRole.ADMIN);
+                                                                   @RequestParam("size") int size){
         return ResponseEntity.ok(emailHistoryService.getPagination(page, size));
     }
 }

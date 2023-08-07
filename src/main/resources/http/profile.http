@@ -1,23 +1,23 @@
 ### 1. Create
 POST localhost:8080/api/v1/profile
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNTExOTYsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2OTA0Mzc1OTYsImlzcyI6Imt1bnV6IHRlc3QgcG9ydGFsaSJ9.fEA269xmvmL-c4A9mSm4KbJAd_B28eh6PyxPsWIfatkONCD3IuiBYQfiQb9CQ8aUSoPzsLdECrhbMf0EFqzftA
+Authorization: Basic Kzk5ODk5Njc0MjEyNzpKYXZvaDE=
+#Authorization: Basic Kzk5ODk5OTk5ODg3NzpBbGkx
 
 {
-  "name": "Azim",
-  "surname": "Razzaqov",
-  "email": "azimrazzoq@gmail.com",
-  "phone": "+998991114455",
-  "password": "Azim1",
+  "name": "Hasan",
+  "surname": "Hasanov",
+  "email": "hasan@gmail.com",
+  "phone": "+998999998855",
+  "password": "Hasan1",
   "status": "ACTIVE",
-  "role": "USER",
-  "imageId": "c8edd3de-ba34-4413-a5c6-8dbae5115d59"
+  "role": "ROLE_PUBLISHER"
 }
 
 ### 2. Update
 PUT localhost:8080/api/v1/profile/4
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk3NjMyNTAsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODk3NjY4NTAsImlzcyI6Imt1bnV6IHRlc3QgcG9ydGFsaSJ9.KpGFKfiKfthREsv2JgGDY1zmmfwsYsUu9LeddTHcx16HuOxu7iCCJwBtOyXZiolerpn6-pTGiTj0Nya4nJJY_Q
+Authorization: Basic Kzk5ODk5Njc0MjEyNzpKYXZvaDE=
 
 
 {

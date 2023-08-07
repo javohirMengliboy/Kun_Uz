@@ -1,17 +1,18 @@
 package com.example.service;
 
+import com.example.config.CustomUserDetails;
 import com.example.dto.CommentDTO;
 import com.example.dto.CommentFilterDTO;
 import com.example.dto.FilterResultDTO;
-import com.example.dto.ProfileDTO;
-import com.example.entity.ArticleEntity;
 import com.example.entity.CommentEntity;
+import com.example.entity.ProfileEntity;
 import com.example.enums.ProfileRole;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.AppMethodNotAllowedException;
 import com.example.exp.ItemNotFoundException;
 import com.example.repository.CommentCustomRepository;
 import com.example.repository.CommentRepository;
+import com.example.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,11 +30,11 @@ public class CommentService {
     @Autowired
     private CommentCustomRepository customRepository;
 
-    public CommentDTO create(Integer id, CommentDTO dto) {
+    public CommentDTO create(CommentDTO dto) {
         CommentEntity entity = new CommentEntity();
         entity.setContent(dto.getContent());
         entity.setArticleId(dto.getArticleId());
-        entity.setProfileId(id);
+        entity.setProfileId(SpringSecurityUtil.getCurrentUserId());
         if (dto.getReplayId() != null){
             entity.setReplayId(dto.getReplayId());
         }
@@ -48,9 +49,10 @@ public class CommentService {
         return dto;
     }
 
-    public CommentDTO update(Integer profileId, CommentDTO dto, String commentId) {
+    public CommentDTO update(CommentDTO dto, String commentId) {
+
         CommentEntity entity = get(commentId);
-        if (!entity.getProfileId().equals(profileId)){
+        if (!entity.getProfileId().equals(SpringSecurityUtil.getCurrentUserId())){
             throw new AppBadRequestException("Not Yours");
         }
         entity.setContent(dto.getContent());
@@ -73,9 +75,11 @@ public class CommentService {
     }
 
 
-    public Boolean delete(Integer id, ProfileRole role, String commentId) {
+    public Boolean delete(String commentId) {
         CommentEntity comment = get(commentId);
-        if (role.equals(ProfileRole.ADMIN) || comment.getProfileId().equals(id)){
+        CustomUserDetails userDetails = SpringSecurityUtil.getCurrentUser();
+        ProfileEntity profile = userDetails.getProfile();
+        if (profile.getRole().equals(ProfileRole.ROLE_ADMIN) || comment.getProfileId().equals(profile.getId())){
            commentRepository.delete(comment);
            return true;
         }
