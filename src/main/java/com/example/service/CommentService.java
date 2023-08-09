@@ -50,7 +50,6 @@ public class CommentService {
     }
 
     public CommentDTO update(CommentDTO dto, String commentId) {
-
         CommentEntity entity = get(commentId);
         if (!entity.getProfileId().equals(SpringSecurityUtil.getCurrentUserId())){
             throw new AppBadRequestException("Not Yours");

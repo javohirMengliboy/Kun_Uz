@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +32,8 @@ public class EmailHistoryController {
         return ResponseEntity.ok(emailHistoryService.getByCreatedDate(date));
     }
 
-    @GetMapping(value = "/get/pagination")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(value = "/pagination")
     public ResponseEntity<PageImpl<EmailHistoryDTO>> getPagination(@RequestParam("page") int page,
                                                                    @RequestParam("size") int size){
         return ResponseEntity.ok(emailHistoryService.getPagination(page, size));

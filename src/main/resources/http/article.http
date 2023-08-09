@@ -1,8 +1,7 @@
 ### 1. Create
 POST localhost:8080/api/v1/article
 Content-Type: application/json
-Authorization: Basic Kzk5ODk5OTk5ODg3NzpBbGkx
-#Authorization: Basic Kzk5ODk5Njc0MjEyNzpKYXZvaDE=
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk3NjIzODYsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODk3NjU5ODYsImlzcyI6Imt1bnV6IHRlc3QgcG9ydGFsaSJ9.TRBFzQgB9ukl9CTXtu9JBqFllcPMXSojMc2sHLSCehYlKyGX60h8M0PFqOTt5VdZFRNvTRE5Lqv9lgluTroKFg
 
 {
   "title": "article 3",
@@ -14,7 +13,7 @@ Authorization: Basic Kzk5ODk5OTk5ODg3NzpBbGkx
 }
 
 ### 2. Update
-PUT localhost:8080/api/v1/article/admin/34cc94aa-8318-463a-8cf6-86bb6b7516ba
+PUT localhost:8080/api/v1/article/34cc94aa-8318-463a-8cf6-86bb6b7516ba
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5Mzg5NzIsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwMDI1MzcyLCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.dukOqSd942jmUExV5ERqd3o3uSo_LQJUAMMk0KcE1ioFDF4A7GFm5OK0fzPauCNgaw-Z6s4Yoe25PcVnA477gg
 
@@ -23,11 +22,11 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5Mzg5NzIsImlkIjoyLCJyb
 }
 
 ### 3. Delete by id
-DELETE localhost:8080/api/v1/article/admin/34cc94aa-8318-463a-8cf6-86bb6b7516ba
+DELETE localhost:8080/api/v1/article/34cc94aa-8318-463a-8cf6-86bb6b7516ba
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODk5MzkwMjcsImlkIjoyLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwMDI1NDI3LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.AGtwqLmZv-mRJGQpN8oCQ1tNlvAYIgcCZC6MozSNE4GUOHfPKqscASkyghO2OSRybCrRHZUmID2swSfGQe2B1g
 
-### 4. Get All
-GET localhost:8080/api/v1/article
+### 4. Change status
+PUT localhost:8080/api/v1/article/change_status
 
 
 ### 5. Get last 5 by type

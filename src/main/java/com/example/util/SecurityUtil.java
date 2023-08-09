@@ -6,8 +6,6 @@ import com.example.exp.AppMethodNotAllowedException;
 import com.example.exp.UnAuthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.Arrays;
-
 public class SecurityUtil {
     public static JwtDTO getJwtDTO(String authToken) {
         if (authToken.startsWith("Bearer ")) {
@@ -35,10 +33,10 @@ public class SecurityUtil {
     }
 
     public static JwtDTO hasRole(HttpServletRequest request, ProfileRole... requiredRoles) {
-        Integer id = (Integer) request.getAttribute("id");
+        String phone = (String) request.getAttribute("phone");
         ProfileRole role = (ProfileRole) request.getAttribute("role");
         if (requiredRoles == null){
-            return new JwtDTO(id,role);
+            return new JwtDTO(phone,role);
         }
         boolean found = false;
         for (ProfileRole r : requiredRoles) {
@@ -50,6 +48,6 @@ public class SecurityUtil {
         if (!found) {
             throw new AppMethodNotAllowedException();
         }
-        return new JwtDTO(id, role);
+        return new JwtDTO(phone, role);
     }
 }

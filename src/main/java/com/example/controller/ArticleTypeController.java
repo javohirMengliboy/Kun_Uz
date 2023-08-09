@@ -21,22 +21,26 @@ public class ArticleTypeController {
         this.articleTypeService = articleTypeService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "")
     public ResponseEntity<ArticleTypeDTO> create(@RequestBody ArticleTypeDTO dto) {
         return ResponseEntity.ok(articleTypeService.create(dto));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> updateOrderById(@RequestBody ArticleTypeDTO dto,
                                                    @PathVariable("id") Integer id) {
         return ResponseEntity.ok(articleTypeService.update(dto, id));
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(articleTypeService.deleteArticleTypeById(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "")
     public ResponseEntity<List<ArticleTypeDTO>> getAll() {
         return ResponseEntity.ok(articleTypeService.getAll());

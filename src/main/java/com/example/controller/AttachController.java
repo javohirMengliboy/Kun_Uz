@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,8 @@ public class AttachController {
     @Autowired
     private AttachService attachService;
 
-    @PostMapping("/open/upload")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MODERATOR', 'ROLE_PUBLISHER')")
+    @PostMapping("/upload")
     public ResponseEntity<AttachDTO> upload(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok().body(attachService.save(file));
     }
@@ -41,6 +43,7 @@ public class AttachController {
         return attachService.loadByIdGeneral(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/admin/pagination")
     public ResponseEntity<List<AttachDTO>> pagination(@RequestParam("page") int page,
                                            @RequestParam("size") int size,
@@ -48,6 +51,8 @@ public class AttachController {
         SecurityUtil.hasRole(request, ProfileRole.ROLE_MODERATOR);
         return ResponseEntity.ok().body(attachService.pagination(page,size));
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/admin/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") String id,
                                           HttpServletRequest request) {

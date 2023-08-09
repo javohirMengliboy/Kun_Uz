@@ -16,45 +16,48 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/profile")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "")
     public ResponseEntity<ProfileDTO> create(@RequestBody ProfileDTO dto) {
         return ResponseEntity.ok(profileService.create(dto));
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> update(@RequestBody ProfileDTO dto,
                                           @PathVariable("id") Integer id) {
         return ResponseEntity.ok(profileService.update(dto, id));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MODERATOR', 'ROLE_PUBLISHER')")
     @PutMapping(value = "/detail")
     public ResponseEntity<Boolean> updateDetail(@RequestBody ProfileDTO dto) {
         return ResponseEntity.ok(profileService.updateDetail(dto));
     }
 
-
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "")
     public ResponseEntity<List<ProfileDTO>> getAll() {
         return ResponseEntity.ok(profileService.getAll());
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(profileService.deleteProfileById(id));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MODERATOR', 'ROLE_PUBLISHER')")
     @PutMapping(value = "/update_img")
     public ResponseEntity<String> updateImage(@RequestBody ProfileDTO dto) {
         return ResponseEntity.ok(profileService.updateImage(dto));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "/filter")
     public ResponseEntity<PageImpl<ProfileDTO>> filter(@RequestBody ProfileFilterDTO filterDTO,
                                                        @RequestParam("page") Integer page,

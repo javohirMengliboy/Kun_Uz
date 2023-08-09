@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/region")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class RegionController {
     private RegionService regionService;
     @Autowired
@@ -20,21 +19,26 @@ public class RegionController {
         this.regionService = regionService;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "")
     public ResponseEntity<RegionDTO> create(@RequestBody RegionDTO dto) {
         return ResponseEntity.ok(regionService.create(dto));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> updateOrderById(@RequestBody RegionDTO dto,
                                                    @PathVariable("id") Integer id) {
         return ResponseEntity.ok(regionService.update(dto, id));
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(regionService.deleteRegionById(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "")
     public ResponseEntity<List<RegionDTO>> getAll() {
         return ResponseEntity.ok(regionService.getAll());

@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/category")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class CategoryController {
     private CategoryService categoryService;
     @Autowired
@@ -20,21 +19,26 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "")
     public ResponseEntity<CategoryDTO> create(@RequestBody CategoryDTO dto) {
         return ResponseEntity.ok(categoryService.create(dto));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> updateOrderById(@RequestBody CategoryDTO dto,
                                                    @PathVariable("id") Integer id) {
         return ResponseEntity.ok(categoryService.update(dto, id));
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(categoryService.deleteCategoryById(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "")
     public ResponseEntity<List<CategoryDTO>> getAll() {
         return ResponseEntity.ok(categoryService.getAll());

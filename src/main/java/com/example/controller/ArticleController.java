@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/article")
-@EnableMethodSecurity(prePostEnabled = true)
 public class ArticleController {
 
     @Autowired
@@ -30,8 +29,8 @@ public class ArticleController {
     }
 
     //  2. Update (Moderator (status to not publish)) (remove old image)
-    @PreAuthorize("hasAnyRole('MODERATOR', 'PUBLISHER')")
-    @PutMapping(value = "/role/{id}")
+    @PreAuthorize("hasRole('MODERATOR')")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Boolean> update(@RequestBody ArticleDTO dto,
                                           @PathVariable("id") String id) {
         return ResponseEntity.ok(articleService.update(dto, id));
@@ -39,10 +38,18 @@ public class ArticleController {
 
     //  3. Delete Article (MODERATOR)
     @PreAuthorize("hasAnyRole('MODERATOR')")
-    @DeleteMapping(value = "/role/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") String id) {
         return ResponseEntity.ok(articleService.deleteProfileById(id));
     }
+
+    @PreAuthorize("hasAnyRole('MODERATOR')")
+    @PutMapping(value = "/change_status")
+    public ResponseEntity<Boolean> changeStatus(@RequestBody ArticleDTO dto,
+                                                   @PathVariable("id") String id) {
+        return ResponseEntity.ok(articleService.changeStatus(dto, id));
+    }
+
 
     //  5. Get Last 5 Article By Types  ordered_by_created_date
     @GetMapping(value = "/get/last_5_by_type")
@@ -131,9 +138,5 @@ public class ArticleController {
         return ResponseEntity.ok().body(articleService.filter(filterDTO, page, size));
     }
 
-    @GetMapping(value = "/get")
-    public ResponseEntity<List<ArticleDTO>> getAll() {
-        return ResponseEntity.ok(articleService.getAll());
-    }
 
 }

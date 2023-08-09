@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.config.CustomUserDetails;
 import com.example.dto.*;
 import com.example.entity.*;
+import com.example.enums.ArticleStatus;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.mapper.ArticleGetMapper;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 @Service
 public class ArticleService {
@@ -290,4 +292,15 @@ public class ArticleService {
         }
         return mapperList;
     }
+
+    public Boolean changeStatus(ArticleDTO dto, String id) {
+        ArticleEntity article = articleRepository.findById(id).orElseThrow(()-> new ItemNotFoundException("Article not found"));
+        article.setStatus(dto.getStatus());
+        article.setPublisherId(SpringSecurityUtil.getCurrentUserId());
+        article.setPublishedDate(LocalDateTime.now());
+        articleRepository.save(article);
+        return true;
+
+    }
+
 }

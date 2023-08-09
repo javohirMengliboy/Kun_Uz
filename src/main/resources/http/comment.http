@@ -24,7 +24,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb
 
 
 ### 4. Get By Article Id
-GET localhost:8080/api/v1/comment/by_article?articleId=feac63d6-d503-4fb8-aed1-2da352b323c3
+GET localhost:8080/api/v1/comment/open/by_article?articleId=feac63d6-d503-4fb8-aed1-2da352b323c3
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDQ2NDI2LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.CBKbPczBG-79JHrYy95CTdKd-cLEO56wJNBNXJsMy-hPnPf6_3ueXHbkpff5-n0uxFCbb_21gcMUP6ODvxaCMw
 
 ### 5. Get Pagination
@@ -43,5 +43,5 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNzM2NzgsImlkIjoxLCJyb
 
 
 ### 7. Get By Replay Id
-GET localhost:8080/api/v1/comment/by_replay?replayId=71ec8ddf-24b5-4e5f-94b6-9b9c30e1126d
+GET localhost:8080/api/v1/comment/open/by_replay?replayId=71ec8ddf-24b5-4e5f-94b6-9b9c30e1126d
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTAzNjAwMjYsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjkwNDQ2NDI2LCJpc3MiOiJrdW51eiB0ZXN0IHBvcnRhbGkifQ.CBKbPczBG-79JHrYy95CTdKd-cLEO56wJNBNXJsMy-hPnPf6_3ueXHbkpff5-n0uxFCbb_21gcMUP6ODvxaCMw

@@ -19,6 +19,7 @@ public class AuthService {
 
     @Autowired
     private ProfileRepository profileRepository;
+
     @Autowired
     private MailSenderService mailSenderService;
 
@@ -49,7 +50,7 @@ public class AuthService {
         response.setSurname(profileEntity.getSurname());
         response.setRole(profileEntity.getRole());
         response.setPhone(profileEntity.getPhone());
-        response.setJwt(JWTUtil.encode(profileEntity.getId(),profileEntity.getRole()));
+        response.setJwt(JWTUtil.encode(profileEntity.getPhone(),profileEntity.getRole()));
         return new ApiResponseDTO(true, response);
     }
 

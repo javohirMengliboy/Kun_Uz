@@ -16,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.UUID;
 @Configuration
@@ -24,6 +27,14 @@ import java.util.UUID;
 public class SpringSecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private JwtTokenFilter jwtTokenFilter;
+
+    public static String[] AUTH_WHITELIST = {"/api/v1/auth/**",
+            "/api/v1/news/**",
+            "/api/v1/region/lang",
+            "/api/v1/attach/**",
+            "/api/v1/article/public/*"};
 
 //    @Bean
 //    public AuthenticationProvider authenticationProvider() {
@@ -81,11 +92,23 @@ public class SpringSecurityConfig {
                 .requestMatchers("/api/v1/articleType/open/**").permitAll()
                 .requestMatchers("/api/v1/attach/open/**").permitAll()
                 .requestMatchers("/api/v1/category/open/**").permitAll()
+                .requestMatchers("/api/v1/comment/open/**").permitAll()
                 .requestMatchers("/api/v1/region/open/**").permitAll()
-                .requestMatchers("/api/v1/emailHistory/**").permitAll()
+                .requestMatchers("/api/v1/emailHistory/get/**").permitAll()
                 .anyRequest().authenticated()
-        ).httpBasic(Customizer.withDefaults());
+        ).addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable);
         return http.build();
+    }
+
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
+            }
+        };
     }
 }
